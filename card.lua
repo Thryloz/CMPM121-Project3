@@ -30,6 +30,7 @@ function CardClass:new()
     card.state = CARD_STATE.IDLE
     card.location = nil
     card.isPlayer = true
+    card.effectActivated = false
     card.faceUp = false
 
     function CardClass:activateEffect()
@@ -40,9 +41,8 @@ end
 
 function CardClass:draw()
     if self.state ~= CARD_STATE.IDLE then
-        love.graphics.setColor(0, 0, 0, 0.8) -- color values [0, 1]
-        local offset = 4 * (self.state == CARD_STATE.GRABBED and 2 or 1)
-        love.graphics.rectangle("fill", self.position.x + offset, self.position.y + offset, self.size.x, self.size.y, 6, 6)
+        love.graphics.setColor(1, 0, 0, 1) -- color values [0, 1]
+        love.graphics.rectangle("line", self.position.x, self.position.y, self.size.x+0.5, self.size.y+0.5, 6, 6)
     end
     if self.faceUp then
         love.graphics.setColor(1, 1, 1, 1)
@@ -62,12 +62,12 @@ function CardClass:draw()
 end
 
 function CardClass:checkForMouseOver(grabber)
-  if self.state == CARD_STATE.GRABBED then
+  if self.state == CARD_STATE.GRABBED or grabber.currentMousePos == nil then
     return
   end
 
   local mousePos = grabber.currentMousePos
-  local isMouseOver = 
+  local isMouseOver =
     mousePos.x > self.position.x and
     mousePos.x < self.position.x + self.size.x and
     mousePos.y > self.position.y and
@@ -88,7 +88,6 @@ function PegasusCard:new()
     self.power = 5
     self.text = "Vanilla"
     self.effectType = EFFECT_TYPE.none
-    self.faceUp = false
     return self
 end
 
@@ -99,7 +98,6 @@ function MinotaurCard:new()
     self.power = 9
     self.text = "Vanilla"
     self.effectType = EFFECT_TYPE.none
-    self.faceUp = false
     return self
 end
 
@@ -110,7 +108,6 @@ function TitanCard:new()
     self.power = 12
     self.text = "Vanilla"
     self.effectType = EFFECT_TYPE.none
-    self.faceUp = false
     return self
 end
 
@@ -121,7 +118,6 @@ function ZeusCard:new()
     self.power = 9
     self.text = "When Revealed: Lower the power of each card in your opponent's hand by 1."
     self.effectType = EFFECT_TYPE.onReveal
-    self.faceUp = false
 
     function ZeusCard:activateEffect()
         local hand = nil
@@ -141,7 +137,6 @@ function CyclopsCard:new()
     self.power = 9
     self.text = "When Revealed: Discard your other cards here, gain +2 power for each discarded."
     self.effectType = EFFECT_TYPE.onReveal
-    self.faceUp = false
 
     function CyclopsCard:activateEffect()
         for i, card in ipairs(self.location.cardTable) do

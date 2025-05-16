@@ -80,7 +80,6 @@ function GrabberClass:grab()
           self.offset = card.position - self.grabPos
           self.previousLocation = location
           self.heldObject.state = CARD_STATE.GRABBED
-          location.cardTable[i] = nil
           break
         end
       end
@@ -96,6 +95,12 @@ function GrabberClass:release()
   end
 
   local validLocation = false
+
+  if self:CheckPlayerHand() then
+      player:addCard(self.heldObject)
+      validLocation = true
+  end
+
   for _, location in ipairs(playerLocationTable) do
     if self:CheckValidLocation(location) then
       location:addCard(self.heldObject)
@@ -105,16 +110,10 @@ function GrabberClass:release()
   end
 
   if not validLocation then
-    if self:CheckPlayerHand() then
-      player:addCard(self.heldObject)
-      validLocation = true
-    end
-  end
-
-  if not validLocation then
     if self.previousLocation == player.hand then 
       table.insert(self.previousLocation, self.heldObject)
     else
+      print("invalid location")
       self.previousLocation:addCard(self.heldObject)
     end
   end

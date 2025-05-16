@@ -11,8 +11,8 @@ function OpponentClass:new()
     opponent.mana = 0
     opponent.points = 0
 
-    opponent.position = Vector(SCREEN_WIDTH/4 , -10)
-    opponent.interactSize = Vector(SCREEN_WIDTH/2, 20)
+    opponent.interactSize = Vector(CARD_SIZE.x*7, 20)
+    opponent.position = Vector(SCREEN_WIDTH/2 - player.interactSize.x/2 , -10)
     
 
     return opponent

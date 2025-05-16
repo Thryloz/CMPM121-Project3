@@ -28,6 +28,12 @@ function LocationClass:new(xPos, yPos, name, player)
     return location
 end
 
+function LocationClass:update()
+    for i, card in ipairs(self.cardTable) do
+        card:moveCard(self.slotPositions[i].x, self.slotPositions[i].y)
+    end
+end
+
 function LocationClass:draw()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.printf(self.power, self.position.x, self.position.y - 20, 110, "center")
@@ -47,14 +53,13 @@ function LocationClass:draw()
     if #self.cardTable ~= 0 then
         for _, card in ipairs(self.cardTable) do
             card:draw()
-        end    
+        end
     end
 end
 
 function LocationClass:addCard(card)
     table.insert(self.cardTable, card)
     card.location = self
-    card:moveCard(self.slotPositions[#self.cardTable].x, self.slotPositions[#self.cardTable].y)
 end
 
 function LocationClass:discardCard(index)

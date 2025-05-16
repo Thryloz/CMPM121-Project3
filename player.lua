@@ -17,16 +17,43 @@ function PlayerClass:new()
     player.points = 0
     player.state = PLAYER_STATE.IDLE
 
-    player.position = Vector(SCREEN_WIDTH/4 , SCREEN_HEIGHT - 10)
-    player.interactSize = Vector(SCREEN_WIDTH/2, 20)
+    player.interactSize = Vector(CARD_SIZE.x*7, 20)
+    player.position = Vector(SCREEN_WIDTH/2 - player.interactSize.x/2 , SCREEN_HEIGHT - 10)
+
+    player.showAllCards = false
+    player.showAllCardsPosition = Vector(SCREEN_WIDTH/8, SCREEN_HEIGHT - 50)
+    player.showAllCardsPositionSize = Vector(SCREEN_WIDTH/20, SCREEN_HEIGHT/30)
 
 
     return player
 end
 
+function PlayerClass:update()
+    if self.showAllCards then
+        for _, card in ipairs(self.hand) do
+            card:moveCard(card.position.x, player.position.y - CARD_SIZE.y + 10)
+        end
+    else
+        for _, card in ipairs(self.hand) do
+            if card.state == CARD_STATE.MOUSE_OVER then
+                card:moveCard(card.position.x, player.position.y - CARD_SIZE.y + 10)
+            else
+                card:moveCard(card.position.x, player.position.y - 20)
+            end
+        end
+    end
+end
+
+
 function PlayerClass:draw()
     love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.rectangle("fill", self.position.x, self.position.y, self.interactSize.x, self.interactSize.y, 6, 6)
+
+    love.graphics.rectangle("fill", self.showAllCardsPosition.x - self.showAllCardsPositionSize.x/2, self.showAllCardsPosition.y, self.showAllCardsPositionSize.x, self.showAllCardsPositionSize.y, 6, 6)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.printf("Show All Cards", self.showAllCardsPosition.x - self.showAllCardsPositionSize.x/2, self.showAllCardsPosition.y, self.showAllCardsPositionSize.x, "center")
+    
+    
 
     if (self.state == PLAYER_STATE.MOUSE_OVER and grabber.heldObject ~= nil) then
         love.graphics.setColor(1, 0, 0, 1)
@@ -34,11 +61,6 @@ function PlayerClass:draw()
     end
 
     for _, card in ipairs(self.hand) do
-        if card.state == CARD_STATE.MOUSE_OVER then
-            card:moveCard(SCREEN_WIDTH/2 - CARD_SIZE.x/2, player.position.y - CARD_SIZE.y + 10)
-        else
-            card:moveCard(SCREEN_WIDTH/2 - CARD_SIZE.x/2, player.position.y - 20)
-        end
         card:draw()
     end
 end
@@ -46,11 +68,22 @@ end
 function PlayerClass:addCard(card)
     table.insert(self.hand, card)
     card.location = self
+    self:orderCards()
 end
 
 function PlayerClass:removeCard(index)
     table.remove(self.hand, index)
+    self:orderCards()
 end
+
+function PlayerClass:orderCards()
+    if #self.hand == 0 then return end
+
+    for i = 1, #self.hand, 1 do
+        self.hand[i]:moveCard(self.position.x + self.interactSize.x/2 - (CARD_SIZE.x * (#self.hand/2 - (i-1))), self.position.y)
+    end
+end
+
 
 function PlayerClass:checkForMouseOver(grabber)
   local mousePos = grabber.currentMousePos
@@ -62,3 +95,4 @@ function PlayerClass:checkForMouseOver(grabber)
 
   self.state = isMouseOver and PLAYER_STATE.MOUSE_OVER or PLAYER_STATE.IDLE
 end
+
