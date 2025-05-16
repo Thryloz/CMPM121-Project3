@@ -1,2 +1,2 @@
 # Project3
-CMPM121 Third Project Card GAme
+CMPM121 Third Project Card Game
