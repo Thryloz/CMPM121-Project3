@@ -49,12 +49,7 @@ function love.load()
     card1 = PegasusCard:new()
     card1.faceUp = true
     player:addCard(card1)
-    card2 = CyclopsCard:new()
-    card2.faceUp = true
-    player:addCard(card2)
-    card3 = ZeusCard:new()
-    card3.faceUp = true
-    player:addCard(card3)
+
 
 end
 

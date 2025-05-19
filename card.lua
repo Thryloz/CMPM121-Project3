@@ -1,6 +1,5 @@
 --Jim Lee
 
-CardClass = {}
 
 CARD_STATE = {
   IDLE = 0,
@@ -16,6 +15,7 @@ EFFECT_TYPE = {
     onEndTurn = 5
 }
 
+CardClass = {}
 function CardClass:new()
     local card = {}
     setmetatable(card, {__index = CardClass})
@@ -62,7 +62,7 @@ function CardClass:draw()
 end
 
 function CardClass:checkForMouseOver(grabber)
-  if self.state == CARD_STATE.GRABBED or grabber.currentMousePos == nil then
+  if self.state == CARD_STATE.GRABBED or grabber.currentMousePos == nil or grabber.heldObject ~= nil then
     return
   end
 

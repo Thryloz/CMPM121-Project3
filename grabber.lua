@@ -59,6 +59,8 @@ end
 function GrabberClass:grab()
   self.grabPos = self.currentMousePos
 
+  if self:CheckShowAll() then player.showAllCards = not player.showAllCards return end
+
   -- check hand
   for i, card in ipairs(player.hand) do
     if card.state == CARD_STATE.MOUSE_OVER then
@@ -80,6 +82,7 @@ function GrabberClass:grab()
           self.offset = card.position - self.grabPos
           self.previousLocation = location
           self.heldObject.state = CARD_STATE.GRABBED
+          table.remove(location.cardTable, i)
           break
         end
       end
@@ -131,19 +134,24 @@ function GrabberClass:CheckValidLocation(location)
   self.currentMousePos.x < location.position.x + location.interactSize.x and
   self.currentMousePos.y > location.position.y and
   self.currentMousePos.y < location.position.y + location.interactSize.y and
-  #location.cardTable < 4 then
-    return true
-  end
-  return false
+  #location.cardTable < 4 then return true end return false
 end
 
+-- helper function to see if mouse is hovering on hand section
 function GrabberClass:CheckPlayerHand()
   if self.currentMousePos.x > player.position.x and
   self.currentMousePos.x < player.position.x + player.interactSize.x and
   self.currentMousePos.y > player.position.y and
   self.currentMousePos.y < player.position.y + player.interactSize.y and
-  #player.hand < 7 then
-    return true
-  end
-  return false
+  #player.hand < 7 then return true end return false
 end
+
+-- helper function to see if mouse is hovering over show all button
+function GrabberClass:CheckShowAll()
+  if self.currentMousePos.x > player.showAllCardsPosition.x and
+  self.currentMousePos.x < player.showAllCardsPosition.x + player.showAllCardsPositionSize.x and
+  self.currentMousePos.y > player.showAllCardsPosition.y and
+  self.currentMousePos.y < player.showAllCardsPosition.y + player.showAllCardsPositionSize.y
+  then return true end return false
+end
+
