@@ -59,6 +59,7 @@ end
 function GrabberClass:grab()
   self.grabPos = self.currentMousePos
 
+  -- check if show all button is clicked
   if self:CheckShowAll() then player.showAllCards = not player.showAllCards return end
 
   -- check hand

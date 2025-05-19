@@ -43,7 +43,7 @@ function love.load()
     opponentLocationTable[2] = LocationClass:new(LOCATION_WIDTH_CENTER, LOCATION_HEIGHT_OPPONENT,  "Olympus", false)
     opponentLocationTable[3] = LocationClass:new(LOCATION_WIDTH_CENTER + LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_OPPONENT, "River Styx", false)
 
-    card = ZeusCard:new()
+    card = PegasusCard:new()
     card.faceUp = true
     player:addCard(card)
     card1 = PegasusCard:new()

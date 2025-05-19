@@ -81,53 +81,69 @@ function CardClass:moveCard(x, y)
     self.position.y = y
 end
 
-PegasusCard = CardClass:new()
+PegasusCard = {}
 function PegasusCard:new()
-    self.name = "Pegasus"
-    self.cost = 3
-    self.power = 5
-    self.text = "Vanilla"
-    self.effectType = EFFECT_TYPE.none
-    return self
+    PegasusCard.__index = PegasusCard
+    setmetatable(PegasusCard, {__index = CardClass})
+    local pegasus = CardClass:new()
+    setmetatable(pegasus, PegasusCard)
+    pegasus.name = "Pegasus"
+    pegasus.cost = 3
+    pegasus.power = 5 
+    pegasus.text = "Vanilla"
+    pegasus.effectType = EFFECT_TYPE.none
+    return pegasus
 end
 
-MinotaurCard = CardClass:new()
+MinotaurCard = {}
 function MinotaurCard:new()
-    self.name = "Minotaur"
-    self.cost = 5
-    self.power = 9
-    self.text = "Vanilla"
-    self.effectType = EFFECT_TYPE.none
-    return self
+    MinotaurCard.__index = MinotaurCard
+    setmetatable(MinotaurCard, {__index = CardClass})
+    local minotaur = CardClass:new()
+    setmetatable(minotaur, MinotaurCard)
+    minotaur.name = "Minotaur"
+    minotaur.cost = 5
+    minotaur.power = 9
+    minotaur.text = "Vanilla"
+    minotaur.effectType = EFFECT_TYPE.none
+    return minotaur
 end
 
-TitanCard = CardClass:new()
+TitanCard = {}
 function TitanCard:new()
-    self.name = "Titan"
-    self.cost = 6
-    self.power = 12
-    self.text = "Vanilla"
-    self.effectType = EFFECT_TYPE.none
-    return self
+    TitanCard.__index = TitanCard
+    setmetatable(TitanCard, {__index = CardClass})
+    local titan = CardClass:new()
+    setmetatable(titan, TitanCard)
+    titan.name = "Titan"
+    titan.cost = 6
+    titan.power = 12
+    titan.text = "Vanilla"
+    titan.effectType = EFFECT_TYPE.none
+    return titan
 end
 
-ZeusCard = CardClass:new()
+ZeusCard = {}
 function ZeusCard:new()
-    self.name = "Zeus"
-    self.cost = 5
-    self.power = 9
-    self.text = "When Revealed: Lower the power of each card in your opponent's hand by 1."
-    self.effectType = EFFECT_TYPE.onReveal
+    ZeusCard.__index = ZeusCard
+    setmetatable(ZeusCard, {__index = CardClass})
+    local zeus = CardClass:new()
+    setmetatable(zeus, ZeusCard)
+    zeus.name = "Zeus"
+    zeus.cost = 5
+    zeus.power = 9
+    zeus.text = "When Revealed: Lower the power of each card in your opponent's hand by 1."
+    zeus.effectType = EFFECT_TYPE.onReveal
 
     function ZeusCard:activateEffect()
         local hand = nil
-        if self.player then hand = opponent.hand else hand = player.hand end -- this made me realize lua doesn't really have ternary operators
+        if zeus.player then hand = opponent.hand else hand = player.hand end -- this made me realize lua doesn't really have ternary operators
         for _, card in ipairs(hand) do
             card.power = card.power-1
         end
     end
 
-    return self
+    return zeus
 end
 
 CyclopsCard = CardClass:new()
