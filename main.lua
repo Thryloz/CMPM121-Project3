@@ -5,8 +5,8 @@ io.stdout:setvbuf("no")
 
 require "vector"
 
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 1080
 CARD_SIZE = Vector(SCREEN_WIDTH*0.078125, SCREEN_HEIGHT*0.194444)
 CARD_OFFSET = Vector(CARD_SIZE.x + 10, CARD_SIZE.y + 10)
 FONT_SIZE = 10
@@ -43,12 +43,12 @@ function love.load()
     opponentLocationTable[2] = LocationClass:new(LOCATION_WIDTH_CENTER, LOCATION_HEIGHT_OPPONENT,  "Olympus", false)
     opponentLocationTable[3] = LocationClass:new(LOCATION_WIDTH_CENTER + LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_OPPONENT, "River Styx", false)
 
-    card = PegasusCard:new()
+    card = ZeusCard:new()
     card.faceUp = true
-    player:addCard(card)
+    player:addCardToHand(card)
     card1 = PegasusCard:new()
     card1.faceUp = true
-    player:addCard(card1)
+    player:addCardToHand(card1)
 
 
 end
@@ -56,14 +56,6 @@ end
 function love.update()
     player:update()
     grabber:update()
-    for _, location in ipairs(playerLocationTable) do
-        location:update()
-    end
-    for _, location in ipairs(opponentLocationTable) do
-        location:update()
-    end
-
-
 end
 
 function love.draw()

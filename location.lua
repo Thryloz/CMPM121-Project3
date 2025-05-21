@@ -28,15 +28,17 @@ function LocationClass:new(xPos, yPos, name, player)
     return location
 end
 
-function LocationClass:update()
-    for i, card in ipairs(self.cardTable) do
-        card:moveCard(self.slotPositions[i].x, self.slotPositions[i].y)
-    end
-end
-
 function LocationClass:draw()
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.printf(self.power, self.position.x, self.position.y - 20, 110, "center")
+    -- draw power
+    if self.player then
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.printf(tostring(self.power), self.position.x, self.position.y - 20, self.interactSize.x, "center")
+    else
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.printf(tostring(self.power), self.position.x, self.position.y + self.interactSize.y + 10, self.interactSize.x, "center")
+    end
+    
+    
   
     -- draw slots
     love.graphics.setColor(0, 0, 0, 0.5)
@@ -60,11 +62,15 @@ end
 function LocationClass:addCard(card)
     table.insert(self.cardTable, card)
     card.location = self
+    self:organizeCards()
+    self:calculatePower();
 end
 
-function LocationClass:discardCard(index)
-    self.cardTable[index] = nil
-    card.location = nil -- TODO: CHANGE TO DISCARD TABLE 
+function LocationClass:removeCard(index)
+    table.remove(self.cardTable, index)
+    card.location = nil
+    self:organizeCards();
+    self:calculatePower();
 end
 
 function LocationClass:checkForMouseOver(grabber)
@@ -76,4 +82,18 @@ function LocationClass:checkForMouseOver(grabber)
     mousePos.y < self.position.y + self.interactSize.y
 
   self.state = isMouseOver and LOCATION_STATE.MOUSE_OVER or LOCATION_STATE.IDLE
+end
+
+function LocationClass:organizeCards()
+    for i, card in ipairs(self.cardTable) do
+        card:moveCard(self.slotPositions[i].x, self.slotPositions[i].y)
+    end
+end
+
+
+function LocationClass:calculatePower()
+    self.power = 0;
+    for _, card in ipairs(self.cardTable) do
+        self.power = self.power + card.power
+    end
 end

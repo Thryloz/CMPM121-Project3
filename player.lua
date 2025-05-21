@@ -13,6 +13,7 @@ function PlayerClass:new()
 
     player.deck = {}
     player.hand = {}
+    player.discard = {}
     player.mana = 0
     player.points = 0
     player.state = PLAYER_STATE.IDLE
@@ -46,14 +47,29 @@ end
 
 
 function PlayerClass:draw()
-    love.graphics.setColor(0, 0, 0, 0.5)
-    love.graphics.rectangle("fill", self.position.x, self.position.y, self.interactSize.x, self.interactSize.y, 6, 6)
 
+    -- deck
+    love.graphics.setColor(0, 0, 0, 0.5)
+    love.graphics.rectangle("fill", SCREEN_WIDTH/16, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2, CARD_SIZE.x, CARD_SIZE.y, 6, 6)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.printf("Deck", SCREEN_WIDTH/16 , LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2 - 20, CARD_SIZE.x, "center")
+    -- draw cards in deck
+   
+    -- discard
+    love.graphics.setColor(0, 0, 0, 0.5)
+    love.graphics.rectangle("fill", SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2, CARD_SIZE.x, CARD_SIZE.y, 6, 6)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.printf("Discard", SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2 - 20, CARD_SIZE.x, "center")
+
+    -- show all button
+    love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.rectangle("fill", self.showAllCardsPosition.x - self.showAllCardsPositionSize.x/2, self.showAllCardsPosition.y, self.showAllCardsPositionSize.x, self.showAllCardsPositionSize.y, 6, 6)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.printf("Show All Cards", self.showAllCardsPosition.x - self.showAllCardsPositionSize.x/2, self.showAllCardsPosition.y, self.showAllCardsPositionSize.x, "center")
-    
-    
+
+    -- hand
+    love.graphics.setColor(0, 0, 0, 0.5)
+    love.graphics.rectangle("fill", self.position.x, self.position.y, self.interactSize.x, self.interactSize.y, 6, 6)
 
     if (self.state == PLAYER_STATE.MOUSE_OVER and grabber.heldObject ~= nil) then
         love.graphics.setColor(1, 0, 0, 1)
@@ -65,13 +81,13 @@ function PlayerClass:draw()
     end
 end
 
-function PlayerClass:addCard(card)
+function PlayerClass:addCardToHand(card)
     table.insert(self.hand, card)
     card.location = self
     self:orderCards()
 end
 
-function PlayerClass:removeCard(index)
+function PlayerClass:removeCardFromHand(index)
     table.remove(self.hand, index)
     self:orderCards()
 end

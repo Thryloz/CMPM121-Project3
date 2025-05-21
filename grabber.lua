@@ -69,7 +69,7 @@ function GrabberClass:grab()
       self.offset = card.position - self.grabPos
       self.previousLocation = player.hand
       self.heldObject.state = CARD_STATE.GRABBED
-      player:removeCard(i)
+      player:removeCardFromHand(i)
       break
     end
   end
@@ -83,7 +83,7 @@ function GrabberClass:grab()
           self.offset = card.position - self.grabPos
           self.previousLocation = location
           self.heldObject.state = CARD_STATE.GRABBED
-          table.remove(location.cardTable, i)
+          location:removeCard(i)
           break
         end
       end
@@ -101,7 +101,7 @@ function GrabberClass:release()
   local validLocation = false
 
   if self:CheckPlayerHand() then
-      player:addCard(self.heldObject)
+      player:addCardToHand(self.heldObject)
       validLocation = true
   end
 
@@ -115,7 +115,7 @@ function GrabberClass:release()
 
   if not validLocation then
     if self.previousLocation == player.hand then 
-      table.insert(self.previousLocation, self.heldObject)
+      player:addCardToHand(self.heldObject);
     else
       print("invalid location")
       self.previousLocation:addCard(self.heldObject)
