@@ -67,8 +67,8 @@ function LocationClass:addCard(card)
 end
 
 function LocationClass:removeCard(index)
+    self.cardTable[index].location = nil
     table.remove(self.cardTable, index)
-    card.location = nil
     self:organizeCards();
     self:calculatePower();
 end

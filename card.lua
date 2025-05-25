@@ -1,6 +1,5 @@
 --Jim Lee
 
-
 CARD_STATE = {
   IDLE = 0,
   MOUSE_OVER = 1,
@@ -16,7 +15,7 @@ EFFECT_TYPE = {
 }
 
 CardClass = {}
-function CardClass:new()
+function CardClass:new(isPlayer)
     local card = {}
     setmetatable(card, {__index = CardClass})
 
@@ -145,6 +144,65 @@ function ZeusCard:new()
     end
 
     return zeus
+end
+
+AresCard = {}
+function AresCard:new()
+    AresCard.__index = AresCard
+    setmetatable(AresCard, {__index = CardClass})
+    local Ares = CardClass:new()
+    setmetatable(Ares, AresCard)
+    Ares.name = "Ares"
+    Ares.cost = 4
+    Ares.power = 2
+    Ares.text = "When Revealed: Gain +2 power for each enemy card here."
+    Ares.effectType = EFFECT_TYPE.onReveal
+
+    function AresCard:activateEffect()
+        local userTable = nil
+        local opponentTable = nil
+        if self.isPlayer then 
+            userTable = playerLocationTable
+            opponentTable = opponentLocationTable
+        else
+            userTable = opponentLocationTable
+            opponentTable = playerLocationTable
+        end
+
+
+        for i, location in ipairs(userTable) do
+            if location == self.location then
+                for _, card in ipairs[opponentTable[i]] do
+                    self.power = self.power + 2
+                end
+            end
+        end
+    end
+
+    return Ares
+end
+
+MedusaCard = {}
+function MedusaCard:new()
+    MedusaCard.__index = MedusaCard
+    setmetatable(MedusaCard, {__index = CardClass})
+    local Medusa = CardClass:new()
+    setmetatable(Medusa, MedusaCard)
+    Medusa.name = "Medusa"
+    Medusa.cost = 7
+    Medusa.power = 10
+    Medusa.text = "When Revealed: Gain +2 power for each enemy card here."
+    Medusa.effectType = EFFECT_TYPE.onPlay
+
+    function MedusaCard:activateEffect()
+        for _, card in ipairs(self.location) do
+            if card ~= self then
+                card.power = card.power - 1
+            end
+        end
+    end
+
+    return Medusa
 end
 
 CyclopsCard = CardClass:new()

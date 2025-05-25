@@ -15,15 +15,14 @@ function PlayerClass:new()
     player.hand = {}
     player.discard = {}
     player.mana = 0
-    player.points = 0
     player.state = PLAYER_STATE.IDLE
 
     player.interactSize = Vector(CARD_SIZE.x*7, 20)
     player.position = Vector(SCREEN_WIDTH/2 - player.interactSize.x/2 , SCREEN_HEIGHT - 10)
 
     player.showAllCards = false
-    player.showAllCardsPosition = Vector(SCREEN_WIDTH/8, SCREEN_HEIGHT - 50)
-    player.showAllCardsPositionSize = Vector(SCREEN_WIDTH/20, SCREEN_HEIGHT/30)
+    -- player.showAllCardsPosition = Vector(SCREEN_WIDTH/8, SCREEN_HEIGHT - 50)
+    -- player.showAllCardsPositionSize = Vector(SCREEN_WIDTH/20, SCREEN_HEIGHT/30)
 
 
     return player
@@ -60,12 +59,14 @@ function PlayerClass:draw()
     love.graphics.rectangle("fill", SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2, CARD_SIZE.x, CARD_SIZE.y, 6, 6)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.printf("Discard", SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2 - 20, CARD_SIZE.x, "center")
+    -- draw cards in discard
+
 
     -- show all button
-    love.graphics.setColor(0, 0, 0, 0.5)
-    love.graphics.rectangle("fill", self.showAllCardsPosition.x - self.showAllCardsPositionSize.x/2, self.showAllCardsPosition.y, self.showAllCardsPositionSize.x, self.showAllCardsPositionSize.y, 6, 6)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.printf("Show All Cards", self.showAllCardsPosition.x - self.showAllCardsPositionSize.x/2, self.showAllCardsPosition.y, self.showAllCardsPositionSize.x, "center")
+    -- love.graphics.setColor(0, 0, 0, 0.5)
+    -- love.graphics.rectangle("fill", self.showAllCardsPosition.x - self.showAllCardsPositionSize.x/2, self.showAllCardsPosition.y, self.showAllCardsPositionSize.x, self.showAllCardsPositionSize.y, 6, 6)
+    -- love.graphics.setColor(1, 1, 1, 1)
+    -- love.graphics.printf("Show All Cards", self.showAllCardsPosition.x - self.showAllCardsPositionSize.x/2, self.showAllCardsPosition.y, self.showAllCardsPositionSize.x, "center")
 
     -- hand
     love.graphics.setColor(0, 0, 0, 0.5)
@@ -76,6 +77,7 @@ function PlayerClass:draw()
         love.graphics.rectangle("line", self.position.x, self.position.y, self.interactSize.x, self.interactSize.y, 6, 6)
     end
 
+    
     for _, card in ipairs(self.hand) do
         card:draw()
     end

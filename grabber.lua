@@ -25,6 +25,8 @@ function GrabberClass:update()
   if grabber.currentMousePos == nil then return end
 
   player:checkForMouseOver(grabber)
+  ShowCardsButton:checkForMouseOver(grabber)
+  EndTurnButton:checkForMouseOver(grabber)
 
   for _, card in ipairs(player.hand) do
     card:checkForMouseOver(grabber)
@@ -60,7 +62,7 @@ function GrabberClass:grab()
   self.grabPos = self.currentMousePos
 
   -- check if show all button is clicked
-  if self:CheckShowAll() then player.showAllCards = not player.showAllCards return end
+  if self:CheckShowCardsButton() then player.showAllCards = not player.showAllCards return end
 
   -- check hand
   for i, card in ipairs(player.hand) do
@@ -148,11 +150,19 @@ function GrabberClass:CheckPlayerHand()
 end
 
 -- helper function to see if mouse is hovering over show all button
-function GrabberClass:CheckShowAll()
-  if self.currentMousePos.x > player.showAllCardsPosition.x and
-  self.currentMousePos.x < player.showAllCardsPosition.x + player.showAllCardsPositionSize.x and
-  self.currentMousePos.y > player.showAllCardsPosition.y and
-  self.currentMousePos.y < player.showAllCardsPosition.y + player.showAllCardsPositionSize.y
+function GrabberClass:CheckShowCardsButton()
+  if self.currentMousePos.x > ShowCardsButton.position.x and
+  self.currentMousePos.x < ShowCardsButton.position.x + ShowCardsButton.size.x and
+  self.currentMousePos.y > ShowCardsButton.position.y and
+  self.currentMousePos.y < ShowCardsButton.position.y + ShowCardsButton.size.y
+  then return true end return false
+end
+
+function GrabberClass:CheckEndTurnButton()
+  if self.currentMousePos.x > EndTurnButton.position.x and
+  self.currentMousePos.x < EndTurnButton.position.x + EndTurnButton.size.x and
+  self.currentMousePos.y > EndTurnButton.position.y and
+  self.currentMousePos.y < EndTurnButton.position.y + EndTurnButton.size.y
   then return true end return false
 end
 
