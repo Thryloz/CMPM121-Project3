@@ -61,13 +61,6 @@ function PlayerClass:draw()
     love.graphics.printf("Discard", SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2 - 20, CARD_SIZE.x, "center")
     -- draw cards in discard
 
-
-    -- show all button
-    -- love.graphics.setColor(0, 0, 0, 0.5)
-    -- love.graphics.rectangle("fill", self.showAllCardsPosition.x - self.showAllCardsPositionSize.x/2, self.showAllCardsPosition.y, self.showAllCardsPositionSize.x, self.showAllCardsPositionSize.y, 6, 6)
-    -- love.graphics.setColor(1, 1, 1, 1)
-    -- love.graphics.printf("Show All Cards", self.showAllCardsPosition.x - self.showAllCardsPositionSize.x/2, self.showAllCardsPosition.y, self.showAllCardsPositionSize.x, "center")
-
     -- hand
     love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.rectangle("fill", self.position.x, self.position.y, self.interactSize.x, self.interactSize.y, 6, 6)
@@ -77,10 +70,17 @@ function PlayerClass:draw()
         love.graphics.rectangle("line", self.position.x, self.position.y, self.interactSize.x, self.interactSize.y, 6, 6)
     end
 
-    
     for _, card in ipairs(self.hand) do
         card:draw()
     end
+
+    love.graphics.setColor(0, 0, 1, 1)
+    love.graphics.setFont(infoFont)
+    love.graphics.printf("Mana: " ..tostring(self.mana), 7 * SCREEN_WIDTH/8 - 30, SCREEN_HEIGHT/2 + SCREEN_HEIGHT/20, INFO_FONT_SIZE * 5, "center")
+
+    love.graphics.setColor(0, 0.329, 0, 1)
+    love.graphics.setFont(infoFont)
+    love.graphics.printf("Points: " ..tostring(gameManager.playerPoints), SCREEN_WIDTH/(INFO_FONT_SIZE-10), SCREEN_HEIGHT/2 + SCREEN_HEIGHT/20, INFO_FONT_SIZE * 5, "center")
 end
 
 function PlayerClass:addCardToHand(card)

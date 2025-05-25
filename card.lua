@@ -49,7 +49,7 @@ function CardClass:draw()
 
         love.graphics.setColor({0, 0, 1, 1})
         love.graphics.printf(self.cost, self.position.x + 5, self.position.y, self.size.x, "left")
-        love.graphics.setColor({0, 0.7, 0.2, 1})
+        love.graphics.setColor({0.024, 0.251, 0.169, 1})
         love.graphics.printf(self.power, self.position.x - 5, self.position.y, self.size.x, "right")
         love.graphics.setColor({0, 0, 0, 1})
         love.graphics.printf(self.name, self.position.x, self.position.y, self.size.x, "center")

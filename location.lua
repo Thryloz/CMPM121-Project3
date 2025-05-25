@@ -37,9 +37,9 @@ function LocationClass:draw()
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.printf(tostring(self.power), self.position.x, self.position.y + self.interactSize.y + 10, self.interactSize.x, "center")
     end
-    
-    
-  
+
+
+
     -- draw slots
     love.graphics.setColor(0, 0, 0, 0.5)
     for i = 1, #self.slotPositions, 1 do
