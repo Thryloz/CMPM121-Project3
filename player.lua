@@ -14,7 +14,7 @@ function PlayerClass:new()
     player.deck = {}
     player.hand = {}
     player.discard = {}
-    player.mana = 0
+    player.mana = 10
     player.state = PLAYER_STATE.IDLE
 
     player.interactSize = Vector(CARD_SIZE.x*7, 20)
@@ -70,10 +70,6 @@ function PlayerClass:draw()
         love.graphics.rectangle("line", self.position.x, self.position.y, self.interactSize.x, self.interactSize.y, 6, 6)
     end
 
-    for _, card in ipairs(self.hand) do
-        card:draw()
-    end
-
     love.graphics.setColor(0, 0, 1, 1)
     love.graphics.setFont(infoFont)
     love.graphics.printf("Mana: " ..tostring(self.mana), 7 * SCREEN_WIDTH/8 - 30, SCREEN_HEIGHT/2 + SCREEN_HEIGHT/20, INFO_FONT_SIZE * 5, "center")
@@ -81,6 +77,13 @@ function PlayerClass:draw()
     love.graphics.setColor(0, 0.329, 0, 1)
     love.graphics.setFont(infoFont)
     love.graphics.printf("Points: " ..tostring(gameManager.playerPoints), SCREEN_WIDTH/(INFO_FONT_SIZE-10), SCREEN_HEIGHT/2 + SCREEN_HEIGHT/20, INFO_FONT_SIZE * 5, "center")
+
+    love.graphics.setFont(cardFont)
+    for _, card in ipairs(self.hand) do
+        if card.state ~= CARD_STATE.GRABBED then
+            card:draw()
+        end
+    end
 end
 
 function PlayerClass:addCardToHand(card)
@@ -98,7 +101,7 @@ function PlayerClass:orderCards()
     if #self.hand == 0 then return end
 
     for i = 1, #self.hand, 1 do
-        self.hand[i]:moveCard(self.position.x + self.interactSize.x/2 - (CARD_SIZE.x * (#self.hand/2 - (i-1))), self.position.y)
+        self.hand[i]:moveCard(self.position.x + self.interactSize.x/2 - (CARD_SIZE.x * (#self.hand/2 - (i-1))), self.position.y - 20)
     end
 end
 

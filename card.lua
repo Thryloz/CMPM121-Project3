@@ -140,7 +140,6 @@ function ZeusCard:new()
         for _, card in ipairs(hand) do
             card.power = card.power-1
         end
-        print(zeus.text)
     end
 
     return zeus

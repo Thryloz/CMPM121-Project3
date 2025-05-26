@@ -49,7 +49,6 @@ function ShowAllCardsButton:new(posX, posY)
     setmetatable(showAllCards, ShowAllCardsButton)
     
     showAllCards.position = Vector(posX, posY)
-    print(showAllCards.position.x, showAllCards.position.y)
     showAllCards.text = "Show All Cards"
 
     return showAllCards
@@ -63,7 +62,6 @@ function EndTurnButton:new(posX, posY)
     setmetatable(endTurn, EndTurnButton)
     
     endTurn.position = Vector(posX, posY)
-    print(endTurn.position.x, endTurn.position.y)
     endTurn.text = "End Turn"
 
     return endTurn

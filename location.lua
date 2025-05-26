@@ -16,6 +16,7 @@ function LocationClass:new(xPos, yPos, name, player)
     location.size = CARD_SIZE
     location.cardTable = {}
     location.player = player
+    location.opposingLocation = nil
 
     location.slotPositions = {}
     location.slotPositions[1] = Vector(location.position.x, location.position.y)

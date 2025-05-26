@@ -41,16 +41,22 @@ function love.load()
 
     player = PlayerClass:new()
     playerLocationTable = {}
-    playerLocationTable[1] = LocationClass:new(LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_PLAYER, "Greece", true)
+    playerLocationTable[1] = LocationClass:new(LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_PLAYER, "Isle of Delos", true)
     playerLocationTable[2] = LocationClass:new(LOCATION_WIDTH_CENTER, LOCATION_HEIGHT_PLAYER, "Olympus", true)
-    playerLocationTable[3] = LocationClass:new(LOCATION_WIDTH_CENTER + LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_PLAYER, "River Styx", true)
-
+    playerLocationTable[3] = LocationClass:new(LOCATION_WIDTH_CENTER + LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_PLAYER, "Arcadia", true)
 
     opponent = OpponentClass:new()
     opponentLocationTable = {}
-    opponentLocationTable[1] = LocationClass:new(LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_OPPONENT, "Greece", false)
+    opponentLocationTable[1] = LocationClass:new(LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_OPPONENT, "Isle of Delos", false)
     opponentLocationTable[2] = LocationClass:new(LOCATION_WIDTH_CENTER, LOCATION_HEIGHT_OPPONENT,  "Olympus", false)
-    opponentLocationTable[3] = LocationClass:new(LOCATION_WIDTH_CENTER + LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_OPPONENT, "River Styx", false)
+    opponentLocationTable[3] = LocationClass:new(LOCATION_WIDTH_CENTER + LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_OPPONENT, "Arcadia", false)
+
+    playerLocationTable[1].opposingLocation = opponentLocationTable[1]
+    playerLocationTable[2].opposingLocation = opponentLocationTable[2]
+    playerLocationTable[3].opposingLocation = opponentLocationTable[3]
+    opponentLocationTable[1].opposingLocation = playerLocationTable[1]
+    opponentLocationTable[2].opposingLocation = playerLocationTable[2]
+    opponentLocationTable[3].opposingLocation = playerLocationTable[3]
 
     ShowCardsButton = ShowAllCardsButton:new(SCREEN_WIDTH/8 - BUTTON_WIDTH, SCREEN_HEIGHT - 50)
     EndTurnButton = EndTurnButton:new(7 *SCREEN_WIDTH/8, SCREEN_HEIGHT - 50)
@@ -93,11 +99,12 @@ function love.draw()
     EndTurnButton:draw()
 
     opponent:draw()
+    player:draw()
     grabber:draw()
+    
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print("Mouse: "..tostring(love.mouse.getX()) .. ", ".. tostring(love.mouse.getY()))
     
-    player:draw()
 end
 
 

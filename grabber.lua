@@ -63,6 +63,7 @@ function GrabberClass:grab()
 
   -- check if show all button is clicked
   if self:CheckShowCardsButton() then player.showAllCards = not player.showAllCards return end
+  if self:CheckEndTurnButton() then gameManager:endTurn() return end
 
   -- check hand
   for i, card in ipairs(player.hand) do
@@ -86,6 +87,10 @@ function GrabberClass:grab()
           self.previousLocation = location
           self.heldObject.state = CARD_STATE.GRABBED
           location:removeCard(i)
+
+          if self.previousLocation == playerLocationTable[1] or self.previousLocation == playerLocationTable[2] or self.previousLocation == playerLocationTable[3] then
+            player.mana = player.mana + self.heldObject.cost
+          end
           break
         end
       end
@@ -110,6 +115,9 @@ function GrabberClass:release()
   for _, location in ipairs(playerLocationTable) do
     if self:CheckValidLocation(location) then
       location:addCard(self.heldObject)
+
+      player.mana = player.mana - self.heldObject.cost
+
       validLocation = true
       break
     end
@@ -121,6 +129,7 @@ function GrabberClass:release()
     else
       print("invalid location")
       self.previousLocation:addCard(self.heldObject)
+      player.mana = player.mana - self.heldObject.cost
     end
   end
 
@@ -137,7 +146,7 @@ function GrabberClass:CheckValidLocation(location)
   self.currentMousePos.x < location.position.x + location.interactSize.x and
   self.currentMousePos.y > location.position.y and
   self.currentMousePos.y < location.position.y + location.interactSize.y and
-  #location.cardTable < 4 then return true end return false
+  #location.cardTable < 4 and player.mana >= self.heldObject.cost then return true end return false
 end
 
 -- helper function to see if mouse is hovering on hand section
@@ -158,6 +167,7 @@ function GrabberClass:CheckShowCardsButton()
   then return true end return false
 end
 
+-- helper function to see if mouse is hovering over End Turn button
 function GrabberClass:CheckEndTurnButton()
   if self.currentMousePos.x > EndTurnButton.position.x and
   self.currentMousePos.x < EndTurnButton.position.x + EndTurnButton.size.x and
