@@ -29,6 +29,17 @@ require "opponent"
 require "button"
 require "GameManager"
 
+cardPool = {
+    WoodenCowCard,
+    PegasusCard,
+    MinotaurCard,
+    TitanCard,
+    ZeusCard,
+    AresCard,
+    MedusaCard,
+    CyclopsCard,
+}
+
 function love.load()
     love.window.setTitle("Of Gods and Monsters")
     love.window.setMode(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -62,18 +73,18 @@ function love.load()
     EndTurnButton = EndTurnButton:new(7 *SCREEN_WIDTH/8, SCREEN_HEIGHT - 50)
     gameManager = GameManagerClass:new()
 
-    card = ZeusCard:new()
-    card.isPlayer = true
-    card.faceUp = true
-    player:addCardToHand(card)
-    card = ZeusCard:new()
-    card.isPlayer = true
-    card.faceUp = true
-    player:addCardToHand(card)
-    card = ZeusCard:new()
-    card.isPlayer = true
-    card.faceUp = true
-    player:addCardToHand(card)
+    dupeCount = {}
+    for i = 0, 6, 1 do
+        local num = math.random(#cardPool)
+        local card = cardPool[num]:new()
+
+        while not isLessThanThreeDupes(card) do
+            num = math.random(#cardPool)
+            card = cardPool[num]:new()
+        end
+
+        player:addCardToHand(card)
+    end
 end
 
 function love.update()
@@ -107,5 +118,28 @@ function love.draw()
     
 end
 
+function isLessThanThreeDupes(card)
+    local found = false
+    for name, count in pairs(dupeCount) do
+        if card.name == name then
+            dupeCount[name] = dupeCount[name] + 1
+            found = true
+            break
+        end
+    end
+
+    if found == false then
+        dupeCount[card.name] = 1
+        return true
+    end
+
+    if dupeCount[card.name] == 3 then
+        dupeCount[card.name] = 2
+        return false
+    end
+
+    return true
+
+end
 
 

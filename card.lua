@@ -80,69 +80,83 @@ function CardClass:moveCard(x, y)
     self.position.y = y
 end
 
+WoodenCowCard = {}
+function WoodenCowCard:new()
+    WoodenCowCard.__index = WoodenCowCard
+    setmetatable(WoodenCowCard, {__index = CardClass})
+    local WoodenCow = CardClass:new()
+    setmetatable(WoodenCow, WoodenCowCard)
+    WoodenCow.name = "Wooden Cow"
+    WoodenCow.cost = 1
+    WoodenCow.power = 1 
+    WoodenCow.text = "Vanilla"
+    WoodenCow.effectType = EFFECT_TYPE.none
+    return WoodenCow
+end
+
 PegasusCard = {}
 function PegasusCard:new()
     PegasusCard.__index = PegasusCard
     setmetatable(PegasusCard, {__index = CardClass})
-    local pegasus = CardClass:new()
-    setmetatable(pegasus, PegasusCard)
-    pegasus.name = "Pegasus"
-    pegasus.cost = 3
-    pegasus.power = 5 
-    pegasus.text = "Vanilla"
-    pegasus.effectType = EFFECT_TYPE.none
-    return pegasus
+    local Pegasus = CardClass:new()
+    setmetatable(Pegasus, PegasusCard)
+    Pegasus.name = "Pegasus"
+    Pegasus.cost = 3
+    Pegasus.power = 5 
+    Pegasus.text = "Vanilla"
+    Pegasus.effectType = EFFECT_TYPE.none
+    return Pegasus
 end
 
 MinotaurCard = {}
 function MinotaurCard:new()
     MinotaurCard.__index = MinotaurCard
     setmetatable(MinotaurCard, {__index = CardClass})
-    local minotaur = CardClass:new()
-    setmetatable(minotaur, MinotaurCard)
-    minotaur.name = "Minotaur"
-    minotaur.cost = 5
-    minotaur.power = 9
-    minotaur.text = "Vanilla"
-    minotaur.effectType = EFFECT_TYPE.none
-    return minotaur
+    local Minotaur = CardClass:new()
+    setmetatable(Minotaur, MinotaurCard)
+    Minotaur.name = "Minotaur"
+    Minotaur.cost = 5
+    Minotaur.power = 9
+    Minotaur.text = "Vanilla"
+    Minotaur.effectType = EFFECT_TYPE.none
+    return Minotaur
 end
 
 TitanCard = {}
 function TitanCard:new()
     TitanCard.__index = TitanCard
     setmetatable(TitanCard, {__index = CardClass})
-    local titan = CardClass:new()
-    setmetatable(titan, TitanCard)
-    titan.name = "Titan"
-    titan.cost = 6
-    titan.power = 12
-    titan.text = "Vanilla"
-    titan.effectType = EFFECT_TYPE.none
-    return titan
+    local Titan = CardClass:new()
+    setmetatable(Titan, TitanCard)
+    Titan.name = "Titan"
+    Titan.cost = 6
+    Titan.power = 12
+    Titan.text = "Vanilla"
+    Titan.effectType = EFFECT_TYPE.none
+    return Titan
 end
 
 ZeusCard = {}
 function ZeusCard:new()
     ZeusCard.__index = ZeusCard
     setmetatable(ZeusCard, {__index = CardClass})
-    local zeus = CardClass:new()
-    setmetatable(zeus, ZeusCard)
-    zeus.name = "Zeus"
-    zeus.cost = 5
-    zeus.power = 9
-    zeus.text = "When Revealed: Lower the power of each card in your opponent's hand by 1."
-    zeus.effectType = EFFECT_TYPE.onReveal
+    local Zeus = CardClass:new()
+    setmetatable(Zeus, ZeusCard)
+    Zeus.name = "Zeus"
+    Zeus.cost = 5
+    Zeus.power = 9
+    Zeus.text = "When Revealed: Lower the power of each card in your opponent's hand by 1."
+    Zeus.effectType = EFFECT_TYPE.onReveal
 
     function ZeusCard:activateEffect()
         local hand = nil
-        if zeus.player then hand = opponent.hand else hand = player.hand end -- this made me realize lua doesn't really have ternary operators
+        if Zeus.player then hand = opponent.hand else hand = player.hand end -- this made me realize lua doesn't really have ternary operators
         for _, card in ipairs(hand) do
             card.power = card.power-1
         end
     end
 
-    return zeus
+    return Zeus
 end
 
 AresCard = {}

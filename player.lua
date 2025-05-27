@@ -52,7 +52,6 @@ function PlayerClass:draw()
     love.graphics.rectangle("fill", SCREEN_WIDTH/16, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2, CARD_SIZE.x, CARD_SIZE.y, 6, 6)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.printf("Deck", SCREEN_WIDTH/16 , LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2 - 20, CARD_SIZE.x, "center")
-    -- draw cards in deck
    
     -- discard
     love.graphics.setColor(0, 0, 0, 0.5)
@@ -79,16 +78,30 @@ function PlayerClass:draw()
     love.graphics.printf("Points: " ..tostring(gameManager.playerPoints), SCREEN_WIDTH/(INFO_FONT_SIZE-10), SCREEN_HEIGHT/2 + SCREEN_HEIGHT/20, INFO_FONT_SIZE * 5, "center")
 
     love.graphics.setFont(cardFont)
+    -- draw cards in hand
     for _, card in ipairs(self.hand) do
         if card.state ~= CARD_STATE.GRABBED then
             card:draw()
         end
+    end
+
+    -- draw cards in deck
+    for _, card in ipairs(self.deck) do
+        card.faceUp = false
+        card:draw()
+    end
+
+    -- draw cards in discard
+    for _, card in ipairs(self.discard) do
+        card.faceUp = true
+        card:draw()
     end
 end
 
 function PlayerClass:addCardToHand(card)
     table.insert(self.hand, card)
     card.location = self
+    card.faceUp = true
     self:orderCards()
 end
 

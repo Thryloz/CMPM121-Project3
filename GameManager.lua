@@ -2,12 +2,6 @@
 
 GameManagerClass = {}
 
-GAME_STATE = {
-  STAGING = 0,
-  REVEAL = 1,
-  END_TURN = 2,
-}
-
 function GameManagerClass:new()
     local gameManager = {}
     setmetatable(gameManager, {__index = GameManagerClass})
@@ -78,3 +72,6 @@ function GameManagerClass:endTurn()
     player.mana = gameManager.turn
     opponent.mana = gameManager.turn
 end
+
+
+
