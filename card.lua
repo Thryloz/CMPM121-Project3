@@ -80,6 +80,30 @@ function CardClass:moveCard(x, y)
     self.position.y = y
 end
 
+function CardClass:discardCard()
+    if self.isPlayer then
+        for i, card in ipairs(self.location) do
+            if card == self then
+                self.location:removeCard(i)
+            end
+        end
+        self.location = player.discard
+        self:moveCard(SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2)
+        table.insert(player.discard, self)
+    else
+        for i, card in ipairs(self.location) do
+            if card == self then
+                self.location:removeCard(i)
+            end
+        end
+        self.location = opponent.discard
+        self:moveCard(SCREEN_WIDTH/16, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2)
+        table.insert(opponent.discard, self)
+    end
+    
+end
+
+
 WoodenCowCard = {}
 function WoodenCowCard:new()
     WoodenCowCard.__index = WoodenCowCard
@@ -144,7 +168,7 @@ function ZeusCard:new()
     setmetatable(Zeus, ZeusCard)
     Zeus.name = "Zeus"
     Zeus.cost = 5
-    Zeus.power = 9
+    Zeus.power = 6
     Zeus.text = "When Revealed: Lower the power of each card in your opponent's hand by 1."
     Zeus.effectType = EFFECT_TYPE.onReveal
 
@@ -154,6 +178,7 @@ function ZeusCard:new()
         for _, card in ipairs(hand) do
             card.power = card.power-1
         end
+        self.effectActivated = true
     end
 
     return Zeus
@@ -172,24 +197,10 @@ function AresCard:new()
     Ares.effectType = EFFECT_TYPE.onReveal
 
     function AresCard:activateEffect()
-        local userTable = nil
-        local opponentTable = nil
-        if self.isPlayer then 
-            userTable = playerLocationTable
-            opponentTable = opponentLocationTable
-        else
-            userTable = opponentLocationTable
-            opponentTable = playerLocationTable
+        for _, card in ipairs(self.location.opposingLocation.cardTable) do
+            Ares.power = Ares.power + 2
         end
-
-
-        for i, location in ipairs(userTable) do
-            if location == self.location then
-                for _, card in ipairs[opponentTable[i]] do
-                    self.power = self.power + 2
-                end
-            end
-        end
+        self.effectActivated = true
     end
 
     return Ares
@@ -204,12 +215,12 @@ function MedusaCard:new()
     Medusa.name = "Medusa"
     Medusa.cost = 7
     Medusa.power = 10
-    Medusa.text = "When Revealed: Gain +2 power for each enemy card here."
+    Medusa.text = "When ANY other card is played here, lower that card's power by 1."
     Medusa.effectType = EFFECT_TYPE.onPlay
 
     function MedusaCard:activateEffect()
-        for _, card in ipairs(self.location) do
-            if card ~= self then
+        for _, card in ipairs(self.location.cardTable) do
+            if card ~= Medusa then
                 card.power = card.power - 1
             end
         end
@@ -220,21 +231,124 @@ end
 
 CyclopsCard = CardClass:new()
 function CyclopsCard:new()
-    self.name = "Cyclops"
-    self.cost = 5
-    self.power = 9
-    self.text = "When Revealed: Discard your other cards here, gain +2 power for each discarded."
-    self.effectType = EFFECT_TYPE.onReveal
+    CyclopsCard.__index = CyclopsCard
+    setmetatable(CyclopsCard, {__index = CardClass})
+    local Cyclops = CardClass:new()
+    setmetatable(Cyclops, CyclopsCard)
+    Cyclops.name = "Cyclops"
+    Cyclops.cost = 5
+    Cyclops.power = 9
+    Cyclops.text = "When Revealed: Discard your other cards here, gain +2 power for each discarded."
+    Cyclops.effectType = EFFECT_TYPE.onReveal
 
     function CyclopsCard:activateEffect()
         for i, card in ipairs(self.location.cardTable) do
             if card ~= self then
-                self.location:discardCard(i)
-                self.power = self.power + 2
+                card:discardCard()
+                Cyclops.power = Cyclops.power + 2
             end
         end
+        self.effectActivated = true
     end
 
-    return self
+    return Cyclops
 end
 
+PoseidonCard = CardClass:new() 
+function PoseidonCard:new()
+    PoseidonCard.__index = PoseidonCard
+    setmetatable(PoseidonCard, {__index = CardClass})
+    local Poseidon = CardClass:new()
+    setmetatable(Poseidon, PoseidonCard)
+    Poseidon.name = "Poseidon"
+    Poseidon.cost = 4
+    Poseidon.power = 2
+    Poseidon.text = "When Revealed: Move away an enemy card here with the lowest power."
+    Poseidon.effectType = EFFECT_TYPE.onReveal
+
+    function PoseidonCard:activateEffect()
+        if #self.location.opposingLocation.cardTable == 0 then return end
+
+        -- find lowest power card
+        local lowestPower = 100
+        local lowestCard = nil
+        local lowestCardIndex = nil
+        for i, card in ipairs(self.location.opposingLocation.cardTable) do
+            if card.power < lowestPower then
+                lowestPower = card.power
+                lowestCard = card
+                lowestCardIndex = i
+            end
+        end
+
+        if lowestCard == nil then return end
+
+        -- find available locations
+        local locationOptions = {}
+        local locationTable = nil
+        if self.isPlayer then locationTable = opponentLocationTable else locationTable = playerLocationTable end
+        for _, location in ipairs(locationTable) do
+            if location ~= lowestCard.location and #location.cardTable ~= 4 then table.insert(locationOptions, location) end
+        end
+
+        if #locationOptions == 0 then return end -- TODO: move to discard
+
+        -- move card
+        local num = math.random(#locationOptions)
+        local resultingLocation = locationOptions[num]
+        self.location.opposingLocation:removeCard(lowestCardIndex)
+        resultingLocation:addCard(lowestCard)
+        
+        self.effectActivated = true
+        
+    end
+
+    return Poseidon
+end
+
+ArtemisCard = CardClass:new()
+function ArtemisCard:new()
+    ArtemisCard.__index = ArtemisCard
+    setmetatable(ArtemisCard, {__index = CardClass})
+    local Artemis = CardClass:new()
+    setmetatable(Artemis, ArtemisCard)
+    Artemis.name = "Artemis"
+    Artemis.cost = 3
+    Artemis.power = 3
+    Artemis.text = "When Revealed: Gain +5 power if there is exactly one enemy card here."
+    Artemis.effectType = EFFECT_TYPE.onReveal
+
+    function ArtemisCard:activateEffect()
+        if #self.location.opposingLocation.cardTable == 1 then
+            Artemis.power = Artemis.power + 5
+        end
+        self.effectActivated = true
+    end
+
+    return Artemis
+end
+
+HeraCard = CardClass:new()
+function HeraCard:new()
+    HeraCard.__index = HeraCard
+    setmetatable(HeraCard, {__index = CardClass})
+    local Hera = CardClass:new()
+    setmetatable(Hera, HeraCard)
+    Hera.name = "Hera"
+    Hera.cost = 5
+    Hera.power = 6
+    Hera.text = "When Revealed: Give cards in your hand +1 power."
+    Hera.effectType = EFFECT_TYPE.onReveal
+
+    function HeraCard:activateEffect()
+        hand = nil
+        if Hera.isPlayer then hand = player.hand else hand = opponent.hand end
+        for _, card in ipairs(hand) do
+            card.power = card.power + 1
+            print("increasing card power")
+        end
+        self.effectActivated = true
+    end
+
+    return Hera
+end

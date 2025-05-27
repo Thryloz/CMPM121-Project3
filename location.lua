@@ -69,6 +69,7 @@ end
 
 function LocationClass:removeCard(index)
     self.cardTable[index].location = nil
+    print("removed: " ..tostring(self.cardTable[index].name))
     table.remove(self.cardTable, index)
     self:organizeCards();
     self:calculatePower();

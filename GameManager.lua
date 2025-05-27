@@ -38,10 +38,11 @@ function GameManagerClass:endTurn()
       secondTable = playerLocationTable
     end
 
+
     -- activate effects
     for _, location in ipairs(firstTable) do
-      for _, card in ipairs(location) do
-        if card.effectType == EFFECT_TYPE.onReveal then
+      for _, card in ipairs(location.cardTable) do
+        if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated then
           card.faceUp = true
           card:activateEffect()
         end
@@ -49,8 +50,8 @@ function GameManagerClass:endTurn()
     end
 
     for _, location in ipairs(secondTable) do
-      for _, card in ipairs(location) do
-        if card.effectType == EFFECT_TYPE.onReveal then
+      for _, card in ipairs(location.cardTable) do
+        if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated then
           card.faceUp = true
           card:activateEffect()
         end
@@ -71,6 +72,11 @@ function GameManagerClass:endTurn()
     gameManager.turn = gameManager.turn + 1
     player.mana = gameManager.turn
     opponent.mana = gameManager.turn
+
+    if #player.hand < 7 then 
+      local drawnCard = table.remove(player.deck, 1)
+      player:addCardToHand(drawnCard)
+    end
 end
 
 

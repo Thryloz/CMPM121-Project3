@@ -52,6 +52,9 @@ function PlayerClass:draw()
     love.graphics.rectangle("fill", SCREEN_WIDTH/16, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2, CARD_SIZE.x, CARD_SIZE.y, 6, 6)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.printf("Deck", SCREEN_WIDTH/16 , LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2 - 20, CARD_SIZE.x, "center")
+    for _, card in ipairs(self.deck) do
+        card:draw()
+    end
    
     -- discard
     love.graphics.setColor(0, 0, 0, 0.5)
@@ -59,6 +62,9 @@ function PlayerClass:draw()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.printf("Discard", SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2 - 20, CARD_SIZE.x, "center")
     -- draw cards in discard
+    for _, card in ipairs(self.discard) do
+        card:draw()
+    end
 
     -- hand
     love.graphics.setColor(0, 0, 0, 0.5)
@@ -99,6 +105,7 @@ function PlayerClass:draw()
 end
 
 function PlayerClass:addCardToHand(card)
+    if card == nil then return end
     table.insert(self.hand, card)
     card.location = self
     card.faceUp = true
