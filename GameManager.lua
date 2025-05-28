@@ -6,7 +6,7 @@ function GameManagerClass:new()
     local gameManager = {}
     setmetatable(gameManager, {__index = GameManagerClass})
 
-    gameManager.turn = 10
+    gameManager.turn = 1
     gameManager.playerPoints = 0
     gameManager.opponentPoints = 0
 
@@ -43,9 +43,9 @@ function GameManagerClass:endTurn()
     for _, location in ipairs(firstTable) do
       for _, card in ipairs(location.cardTable) do
         if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated and card.location == location then
-          card.faceUp = true
           card:activateEffect()
         end
+        card.faceUp = true
       end
     end
 
@@ -55,6 +55,8 @@ function GameManagerClass:endTurn()
           card.faceUp = true
           card:activateEffect()
         end
+        card.faceUp = true
+
       end
     end
 
@@ -82,10 +84,17 @@ function GameManagerClass:endTurn()
     player.mana = gameManager.turn
     opponent.mana = gameManager.turn
 
-    if #player.hand < 7 then 
+    if #player.hand < 7 and #player.deck >= 1 then 
       local drawnCard = table.remove(player.deck, 1)
       player:addCardToHand(drawnCard)
     end
+
+    if #opponent.hand < 7 and #opponent.deck >= 1 then 
+      local drawnCard = table.remove(opponent.deck, 1)
+      opponent:addCardToHand(drawnCard)
+    end
+
+    opponent:stageCards()
 end
 
 

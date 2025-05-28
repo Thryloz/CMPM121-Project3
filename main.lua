@@ -76,33 +76,52 @@ function love.load()
     EndTurnButton = EndTurnButton:new(7 *SCREEN_WIDTH/8, SCREEN_HEIGHT - 50)
     gameManager = GameManagerClass:new()
 
-    -- create player deck
-    -- dupeCount = {}
-    -- for i = 0, 19, 1 do
-    --     local num = math.random(#cardPool)
-    --     local card = cardPool[num]:new()
+    --create player deck
+    dupeCount = {}
+    for i = 0, 19, 1 do
+        local num = math.random(#cardPool)
+        local card = cardPool[num]:new()
 
-    --     while not isLessThanThreeDupes(card) do
-    --         num = math.random(#cardPool)
-    --         card = cardPool[num]:new()
-    --     end
-    --     card:moveCard(SCREEN_WIDTH/16, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2)
-    --     card.faceUp = false
-    --     table.insert(player.deck, card)
-    -- end
+        while not isLessThanThreeDupes(card) do
+            num = math.random(#cardPool)
+            card = cardPool[num]:new()
+        end
 
-    -- for i = 0, 3, 1 do
-    --     local num = math.random(#player.deck)
-    --     local card = player.deck[num]
-    --     table.remove(player.deck, num)
-    --     player:addCardToHand(card)
-    -- end
-    card = CyclopsCard:new()
-    player:addCardToHand(card)
-    card = CyclopsCard:new()
-    player:addCardToHand(card)
-    card = CyclopsCard:new()
-    player:addCardToHand(card)
+        card:moveCard(SCREEN_WIDTH/16, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2)
+        card.faceUp = false
+        table.insert(player.deck, card)
+    end
+
+    for i = 0, 3, 1 do
+        local num = math.random(#player.deck)
+        local card = player.deck[num]
+        table.remove(player.deck, num)
+        player:addCardToHand(card)
+    end
+
+    --create opponent deck
+    dupeCount = {}
+    for i = 0, 19, 1 do
+        local num = math.random(#cardPool)
+        local card = cardPool[num]:new()
+
+        while not isLessThanThreeDupes(card) do
+            num = math.random(#cardPool)
+            card = cardPool[num]:new()
+        end
+        
+        card:moveCard(SCREEN_WIDTH/16, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2)
+        card.faceUp = false
+        table.insert(opponent.deck, card)
+    end
+
+    for i = 0, 3, 1 do
+        local num = math.random(#opponent.deck)
+        local card = opponent.deck[num]
+        table.remove(opponent.deck, num)
+        opponent:addCardToHand(card)
+    end
+    opponent:stageCards()
 end
 
 function love.update()
@@ -136,28 +155,28 @@ function love.draw()
     
 end
 
--- function isLessThanThreeDupes(card)
---     local found = false
---     for name, count in pairs(dupeCount) do
---         if card.name == name then
---             dupeCount[name] = dupeCount[name] + 1
---             found = true
---             break
---         end
---     end
+function isLessThanThreeDupes(card)
+    local found = false
+    for name, count in pairs(dupeCount) do
+        if card.name == name then
+            dupeCount[name] = dupeCount[name] + 1
+            found = true
+            break
+        end
+    end
 
---     if found == false then
---         dupeCount[card.name] = 1
---         return true
---     end
+    if found == false then
+        dupeCount[card.name] = 1
+        return true
+    end
 
---     if dupeCount[card.name] == 3 then
---         dupeCount[card.name] = 2
---         return false
---     end
+    if dupeCount[card.name] == 3 then
+        dupeCount[card.name] = 2
+        return false
+    end
 
---     return true
+    return true
 
--- end
+end
 
 

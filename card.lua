@@ -318,7 +318,7 @@ function ArtemisCard:new()
 
     function ArtemisCard:activateEffect()
         if #self.location.opposingLocation.cardTable == 1 then
-            Artemis.power = Artemis.power + 5
+            self.power = self.power + 5
         end
         self.effectActivated = true
     end

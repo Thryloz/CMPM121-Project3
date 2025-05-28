@@ -63,13 +63,11 @@ end
 function LocationClass:addCard(card)
     table.insert(self.cardTable, card)
     card.location = self
-    print("added: "..tostring(card.name).." to "..card.location.name)
     self:organizeCards()
     self:calculatePower();
 end
 
 function LocationClass:removeCard(card)
-    print("removing card " ..card.name)
     for i, ownCard in ipairs(self.cardTable) do
         if ownCard == card then
             table.remove(self.cardTable, i)

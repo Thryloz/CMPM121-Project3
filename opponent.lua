@@ -14,8 +14,6 @@ function OpponentClass:new()
     opponent.interactSize = Vector(CARD_SIZE.x*7, 20)
     opponent.position = Vector(SCREEN_WIDTH/2 - opponent.interactSize.x/2, -10)
 
-
-
     return opponent
 end
 
@@ -31,28 +29,29 @@ end
 
 
 function OpponentClass:draw()
-
     -- deck
     love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.rectangle("fill", SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2, CARD_SIZE.x, CARD_SIZE.y, 6, 6)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.printf("Deck", SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2 - 20, CARD_SIZE.x, "center")
-
     -- draw cards in deck
-
+    for _, card in ipairs(self.deck) do
+        card:draw()
+    end
 
     -- discard
     love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.rectangle("fill", SCREEN_WIDTH/16, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2, CARD_SIZE.x, CARD_SIZE.y, 6, 6)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.printf("Discard", SCREEN_WIDTH/16 , LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2 - 20, CARD_SIZE.x, "center")
-
     -- draw cards in discard
+    for _, card in ipairs(self.discard) do
+        card:draw()
+    end
 
     -- hand
     love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.rectangle("fill", self.position.x, self.position.y, self.interactSize.x, self.interactSize.y, 6, 6)
-
 
     love.graphics.setColor(1, 0, 0, 1)
     love.graphics.setFont(infoFont)
@@ -66,11 +65,33 @@ function OpponentClass:draw()
     for _, card in ipairs(self.hand) do
         card:draw()
     end
+
+    -- draw cards in deck
+    for _, card in ipairs(self.deck) do
+        card.faceUp = false
+        card:draw()
+    end
+
+    -- draw cards in discard
+    for _, card in ipairs(self.discard) do
+        card.faceUp = true
+        card:draw()
+    end
 end
 
 function OpponentClass:addCardToHand(card)
+    if card == nil then return end
     table.insert(self.hand, card)
     card.location = self
+    self:orderCards()
+end
+
+function OpponentClass:removeCardFromHand(card)
+    for i, ownCard in ipairs(self.hand) do
+        if ownCard == card then
+            table.remove(self.hand, i)
+        end
+    end
     self:orderCards()
 end
 
@@ -82,4 +103,19 @@ function OpponentClass:orderCards()
     end
 end
 
+
+function OpponentClass:stageCards()
+    if #self.hand == 0 then return end
+    local numCardsToPlay = math.random(#self.hand)
+
+    for i = 0, numCardsToPlay, 1 do
+        local card = self.hand[math.random(#self.hand)]
+        local location = opponentLocationTable[math.random(3)]
+        if card.cost <= self.mana and #location.cardTable < 4 then
+            self:removeCardFromHand(card)
+            location:addCard(card)
+            self.mana = self.mana - card.cost
+        end
+    end
+end
 
