@@ -80,13 +80,13 @@ function GrabberClass:grab()
   -- check locations
   if (self.heldObject == nil) then
     for _, location in ipairs(playerLocationTable) do
-      for i, card in ipairs(location.cardTable) do
+      for _, card in ipairs(location.cardTable) do
         if card.state == CARD_STATE.MOUSE_OVER then
           self.heldObject = card
           self.offset = card.position - self.grabPos
           self.previousLocation = location
           self.heldObject.state = CARD_STATE.GRABBED
-          location:removeCard(i)
+          location:removeCard(card)
 
           if self.previousLocation == playerLocationTable[1] or self.previousLocation == playerLocationTable[2] or self.previousLocation == playerLocationTable[3] then
             player.mana = player.mana + self.heldObject.cost

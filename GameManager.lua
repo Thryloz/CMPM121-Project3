@@ -6,7 +6,7 @@ function GameManagerClass:new()
     local gameManager = {}
     setmetatable(gameManager, {__index = GameManagerClass})
 
-    gameManager.turn = 1
+    gameManager.turn = 10
     gameManager.playerPoints = 0
     gameManager.opponentPoints = 0
 
@@ -42,7 +42,7 @@ function GameManagerClass:endTurn()
     -- activate effects
     for _, location in ipairs(firstTable) do
       for _, card in ipairs(location.cardTable) do
-        if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated then
+        if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated and card.location == location then
           card.faceUp = true
           card:activateEffect()
         end
@@ -51,14 +51,23 @@ function GameManagerClass:endTurn()
 
     for _, location in ipairs(secondTable) do
       for _, card in ipairs(location.cardTable) do
-        if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated then
+        if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated and card.location == location then
           card.faceUp = true
           card:activateEffect()
         end
       end
     end
 
-    -- calculate power and points 
+    -- calculated power after all effects are done
+    for _, location in ipairs(firstTable) do
+      location:calculatePower()
+    end
+
+    for _, location in ipairs(secondTable) do
+      location:calculatePower()
+    end
+
+    -- points 
     for _, location in ipairs(playerLocationTable) do
       local diff = location.power - location.opposingLocation.power
       if diff >= 0 then

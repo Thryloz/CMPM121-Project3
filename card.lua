@@ -82,18 +82,18 @@ end
 
 function CardClass:discardCard()
     if self.isPlayer then
-        for i, card in ipairs(self.location) do
+        for _, card in ipairs(self.location.cardTable) do
             if card == self then
-                self.location:removeCard(i)
+                self.location:removeCard(card)
             end
         end
         self.location = player.discard
         self:moveCard(SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2)
         table.insert(player.discard, self)
     else
-        for i, card in ipairs(self.location) do
+        for _, card in ipairs(self.location.cardTable) do
             if card == self then
-                self.location:removeCard(i)
+                self.location:removeCard(card)
             end
         end
         self.location = opponent.discard
@@ -242,10 +242,10 @@ function CyclopsCard:new()
     Cyclops.effectType = EFFECT_TYPE.onReveal
 
     function CyclopsCard:activateEffect()
-        for i, card in ipairs(self.location.cardTable) do
+        for _, card in ipairs(self.location.cardTable) do
             if card ~= self then
                 card:discardCard()
-                Cyclops.power = Cyclops.power + 2
+                self.power = self.power + 2
             end
         end
         self.effectActivated = true
@@ -272,12 +272,10 @@ function PoseidonCard:new()
         -- find lowest power card
         local lowestPower = 100
         local lowestCard = nil
-        local lowestCardIndex = nil
-        for i, card in ipairs(self.location.opposingLocation.cardTable) do
+        for _, card in ipairs(self.location.opposingLocation.cardTable) do
             if card.power < lowestPower then
                 lowestPower = card.power
                 lowestCard = card
-                lowestCardIndex = i
             end
         end
 
@@ -296,7 +294,7 @@ function PoseidonCard:new()
         -- move card
         local num = math.random(#locationOptions)
         local resultingLocation = locationOptions[num]
-        self.location.opposingLocation:removeCard(lowestCardIndex)
+        self.location.opposingLocation:removeCard(lowestCard)
         resultingLocation:addCard(lowestCard)
         
         self.effectActivated = true
@@ -345,7 +343,6 @@ function HeraCard:new()
         if Hera.isPlayer then hand = player.hand else hand = opponent.hand end
         for _, card in ipairs(hand) do
             card.power = card.power + 1
-            print("increasing card power")
         end
         self.effectActivated = true
     end
