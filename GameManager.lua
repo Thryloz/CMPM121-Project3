@@ -56,7 +56,6 @@ function GameManagerClass:endTurn()
           card:activateEffect()
         end
         card.faceUp = true
-
       end
     end
 

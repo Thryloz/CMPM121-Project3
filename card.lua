@@ -176,7 +176,8 @@ function ZeusCard:new()
         local hand = nil
         if Zeus.player then hand = opponent.hand else hand = player.hand end -- this made me realize lua doesn't really have ternary operators
         for _, card in ipairs(hand) do
-            card.power = card.power-1
+            card.power = card.power - 1
+            if card.power < 0 then card.power = 0 end
         end
         self.effectActivated = true
     end
@@ -198,7 +199,7 @@ function AresCard:new()
 
     function AresCard:activateEffect()
         for _, card in ipairs(self.location.opposingLocation.cardTable) do
-            Ares.power = Ares.power + 2
+            self.power = self.power + 2
         end
         self.effectActivated = true
     end
@@ -223,6 +224,7 @@ function MedusaCard:new()
             if card ~= Medusa then
                 card.power = card.power - 1
             end
+            if card.power < 0 then card.power = 0 end
         end
     end
 
@@ -242,7 +244,11 @@ function CyclopsCard:new()
     Cyclops.effectType = EFFECT_TYPE.onReveal
 
     function CyclopsCard:activateEffect()
+        local cards = {}
         for _, card in ipairs(self.location.cardTable) do
+            table.insert(cards, card)
+        end
+        for _, card in ipairs(cards) do
             if card ~= self then
                 card:discardCard()
                 self.power = self.power + 2
@@ -284,21 +290,20 @@ function PoseidonCard:new()
         -- find available locations
         local locationOptions = {}
         local locationTable = nil
-        if self.isPlayer then locationTable = opponentLocationTable else locationTable = playerLocationTable end
+        if self.isPlayer then locationTable = playerLocationTable else locationTable = opponentLocationTable end
         for _, location in ipairs(locationTable) do
             if location ~= lowestCard.location and #location.cardTable ~= 4 then table.insert(locationOptions, location) end
         end
 
-        if #locationOptions == 0 then return end -- TODO: move to discard
+        if #locationOptions == 0 then lowestCard:discardCard() end -- TODO: move to discard
 
         -- move card
         local num = math.random(#locationOptions)
         local resultingLocation = locationOptions[num]
         self.location.opposingLocation:removeCard(lowestCard)
         resultingLocation:addCard(lowestCard)
-        
-        self.effectActivated = true
-        
+
+        self.effectActivated = true  
     end
 
     return Poseidon
@@ -348,4 +353,56 @@ function HeraCard:new()
     end
 
     return Hera
+end
+
+DemeterCard = CardClass:new()
+function DemeterCard:new()
+    DemeterCard.__index = DemeterCard
+    setmetatable(DemeterCard, {__index = CardClass})
+    local Demeter = CardClass:new()
+    setmetatable(Demeter, DemeterCard)
+    Demeter.name = "Demeter"
+    Demeter.cost = 3
+    Demeter.power = 2
+    Demeter.text = "When Revealed: Both players draw a card."
+    Demeter.effectType = EFFECT_TYPE.onReveal
+
+    function DemeterCard:activateEffect()
+        if #player.hand < 7 and #player.deck >= 1 then
+            local drawnCard = table.remove(player.deck, 1)
+            player:addCardToHand(drawnCard)
+        end
+
+        if #opponent.hand < 7 and #opponent.deck >= 1 then
+            local drawnCard = table.remove(opponent.deck, 1)
+            opponent:addCardToHand(drawnCard)
+        end
+        self.effectActivated = true
+    end
+
+    return Demeter
+end
+
+HadesCard = CardClass:new()
+function HadesCard:new()
+    HadesCard.__index = HadesCard
+    setmetatable(HadesCard, {__index = CardClass})
+    local Hades = CardClass:new()
+    setmetatable(Hades, HadesCard)
+    Hades.name = "Hades"
+    Hades.cost = 4
+    Hades.power = 1
+    Hades.text = "When Revealed: Gain +2 power for each card in your discard pile."
+    Hades.effectType = EFFECT_TYPE.onReveal
+
+    function HadesCard:activateEffect()
+        local discard = nil
+        if self.isPlayer then discard = player.discard else discard = opponent.discard end
+        if #discard == 0 then return end
+        self.power = self.power + (#discard * 2)
+        
+        self.effectActivated = true
+    end
+
+    return Hades
 end
