@@ -221,7 +221,13 @@ function MedusaCard:new()
 
     function MedusaCard:activateEffect()
         for _, card in ipairs(self.location.cardTable) do
-            if card ~= Medusa then
+            if card ~= self then
+                card.power = card.power - 1
+            end
+            if card.power < 0 then card.power = 0 end
+        end
+        for _, card in ipairs(self.location.opposingLocation.cardTable) do
+            if card ~= self then
                 card.power = card.power - 1
             end
             if card.power < 0 then card.power = 0 end
@@ -405,4 +411,58 @@ function HadesCard:new()
     end
 
     return Hades
+end
+
+HerculesCard = CardClass:new()
+function HerculesCard:new()
+    HerculesCard.__index = HerculesCard
+    setmetatable(HerculesCard, {__index = CardClass})
+    local Hercules = CardClass:new()
+    setmetatable(Hercules, HerculesCard)
+    Hercules.name = "Hercules"
+    Hercules.cost = 5
+    Hercules.power = 8
+    Hercules.text = "When Revealed: Doubles its power if its the strongest card here."
+    Hercules.effectType = EFFECT_TYPE.onReveal
+
+    function HerculesCard:activateEffect()
+        local strongestCard = nil
+        local highestPower = -1
+        for _, card in ipairs(self.location.cardTable) do
+            if card.power > highestPower then
+                highestPower = card.power
+                strongestCard = card
+            end
+        end
+        for _, card in ipairs(self.location.opposingLocation.cardTable) do
+            if card.power > highestPower then
+                highestPower = card.power
+                strongestCard = card
+            end
+        end
+        if strongestCard == self then self.power = self.power * 2 end
+        self.effectActivated = true
+    end
+
+    return Hercules
+end
+
+DionysusCard = CardClass:new()
+function DionysusCard:new()
+    DionysusCard.__index = DionysusCard
+    setmetatable(DionysusCard, {__index = CardClass})
+    local Dionysus = CardClass:new()
+    setmetatable(Dionysus, DionysusCard)
+    Dionysus.name = "Dionysus"
+    Dionysus.cost = 6
+    Dionysus.power = 8
+    Dionysus.text = "When Revealed: Gain +2 power for each of your other cards here."
+    Dionysus.effectType = EFFECT_TYPE.onReveal
+
+    function DionysusCard:activateEffect()
+        self.power = self.power + ((#self.location.cardTable-1) * 2)
+        self.effectActivated = true
+    end
+
+    return Dionysus
 end
