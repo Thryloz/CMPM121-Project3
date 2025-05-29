@@ -64,6 +64,7 @@ function GrabberClass:grab()
   -- check if show all button is clicked
   if self:CheckShowCardsButton() then player.showAllCards = not player.showAllCards return end
   if self:CheckEndTurnButton() then gameManager:endTurn() return end
+  if self:CheckRestartButton() then love.load() return end
 
   -- check hand
   for i, card in ipairs(player.hand) do
@@ -176,3 +177,10 @@ function GrabberClass:CheckEndTurnButton()
   then return true end return false
 end
 
+function GrabberClass:CheckRestartButton()
+  if self.currentMousePos.x > RestartButton.position.x and
+  self.currentMousePos.x < RestartButton.position.x + RestartButton.size.x and
+  self.currentMousePos.y > RestartButton.position.y and
+  self.currentMousePos.y < RestartButton.position.y + RestartButton.size.y
+  then return true end return false
+end

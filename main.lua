@@ -19,7 +19,7 @@ LOCATION_HEIGHT_OPPONENT = SCREEN_HEIGHT/2 - SCREEN_HEIGHT/4 - CARD_SIZE.y- (CAR
 BUTTON_WIDTH = SCREEN_WIDTH/20
 BUTTON_HEIGHT = SCREEN_HEIGHT/30
 
-WIN_SCORE = 20
+WIN_SCORE = 100
 
 require "location"
 require "card"
@@ -78,6 +78,7 @@ function love.load()
     EndTurnButton = EndTurnButton:new(7 *SCREEN_WIDTH/8, SCREEN_HEIGHT - 50)
     gameManager = GameManagerClass:new()
 
+    win = false
     --create player deck
     dupeCount = {}
     for i = 0, 19, 1 do
@@ -124,6 +125,7 @@ function love.load()
         opponent:addCardToHand(card)
     end
     opponent:stageCards()
+
 end
 
 function love.update()
@@ -132,6 +134,19 @@ function love.update()
 end
 
 function love.draw()
+    if win == true then
+        RestartButton = RestartButton:new(SCREEN_HEIGHT/2 + 150, SCREEN_HEIGHT/2 + 150)
+        if gameManager.winningPlayer == player then
+            love.graphics.setFont(love.graphics.newFont(100))
+            love.graphics.printf("YOU WIN", 0, SCREEN_HEIGHT/2, SCREEN_WIDTH, "center")
+            RestartButton:draw()
+        else
+            love.graphics.setFont(love.graphics.newFont(100))
+            love.graphics.printf("YOU LOSE", 0, SCREEN_HEIGHT/2, SCREEN_WIDTH, "center")
+            RestartButton:draw()
+        end
+        return
+    end
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("fill", 0, SCREEN_HEIGHT/2-1, SCREEN_WIDTH, 2)
 

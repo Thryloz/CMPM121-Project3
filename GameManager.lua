@@ -78,6 +78,18 @@ function GameManagerClass:endTurn()
       end
     end
 
+    -- check win 
+    if self.playerPoints >= WIN_SCORE then
+      winningPlayer = player
+      win = true
+      return
+    end
+
+    if self.opponentPoints >= WIN_SCORE then
+      winningPlayer = opponent
+      win = true
+    end
+
     -- end turn
     gameManager.turn = gameManager.turn + 1
     player.mana = gameManager.turn

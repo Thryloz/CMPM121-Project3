@@ -12,13 +12,14 @@ function ButtonClass:new(posX, posY)
 
     button.position = Vector(posX, posY)
     button.size = Vector(BUTTON_WIDTH, BUTTON_HEIGHT)
-    button.text = "tmp"
+    button.text = "Restart"
     button.state = BUTTON_STATE.IDLE
     
     return button
 end
 
 function ButtonClass:draw()
+    love.graphics.setFont(cardFont)
     love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.rectangle("fill", self.position.x, self.position.y, self.size.x, self.size.y, 6, 6)
     love.graphics.setColor(1, 1, 1, 1)
@@ -65,4 +66,17 @@ function EndTurnButton:new(posX, posY)
     endTurn.text = "End Turn"
 
     return endTurn
+end
+
+RestartButton = {}
+function RestartButton:new(posX, posY)
+    RestartButton.__index = RestartButton
+    setmetatable(RestartButton, {__index = ButtonClass})
+    local restart = ButtonClass:new()
+    setmetatable(restart, RestartButton)
+
+    restart.position = Vector(posX, posY)
+    restart.text = "Restart"
+
+    return restart
 end
