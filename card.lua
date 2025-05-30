@@ -296,7 +296,7 @@ function PoseidonCard:new()
         -- find available locations
         local locationOptions = {}
         local locationTable = nil
-        if self.isPlayer then locationTable = playerLocationTable else locationTable = opponentLocationTable end
+        if self.isPlayer then locationTable = opponentLocationTable else locationTable = playerLocationTable end
         for _, location in ipairs(locationTable) do
             if location ~= lowestCard.location and #location.cardTable ~= 4 then table.insert(locationOptions, location) end
         end
@@ -309,7 +309,7 @@ function PoseidonCard:new()
         self.location.opposingLocation:removeCard(lowestCard)
         resultingLocation:addCard(lowestCard)
 
-        self.effectActivated = true  
+        self.effectActivated = true
     end
 
     return Poseidon
