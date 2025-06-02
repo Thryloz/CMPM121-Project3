@@ -14,5 +14,5 @@ I still feel like I should have combined the grabber class and player class, but
 
 There's some interesting layouts I've seen in other people's projects such as a console showing what's happening or a side panel showing the card information, but with my current layout I can't make those work. Something to keep in mind for future projects though.
 
-<ins>Assets</ins>
+<ins>Assets</ins><br/>
 None yet, everything is default Love2D.
