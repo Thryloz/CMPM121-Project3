@@ -94,6 +94,7 @@ function love.load()
 
         card:moveCard(SCREEN_WIDTH/16, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2)
         card.faceUp = false
+        card.isPlayer = true
         table.insert(player.deck, card)
     end
 
@@ -115,8 +116,9 @@ function love.load()
             card = cardPool[num]:new()
         end
         
-        card:moveCard(SCREEN_WIDTH/16, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2)
+        card:moveCard(SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2)
         card.faceUp = false
+        card.isPlayer = false
         table.insert(opponent.deck, card)
     end
 
@@ -130,7 +132,8 @@ function love.load()
 
 end
 
-function love.update()
+
+function love.update(dt)
     player:update()
     grabber:update()
 end
@@ -199,3 +202,10 @@ function isLessThanThreeDupes(card)
 end
 
 
+function wait( seconds )
+  local dt = 0
+  while dt < seconds do
+    dt = dt + 1
+    coroutine.yield(true)
+  end
+end

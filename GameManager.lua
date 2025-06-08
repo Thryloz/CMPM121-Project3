@@ -17,7 +17,9 @@ function GameManagerClass:new()
 end
 
 function GameManagerClass:endTurn()
-    
+
+    if isRevealingCard then return end
+
     -- determine whose winning
     if gameManager.turn ~= 1 then
       if self.playerPoints > self.opponentPoints then self.winningPlayer = player
@@ -46,16 +48,17 @@ function GameManagerClass:endTurn()
           card:activateEffect()
         end
         card.faceUp = true
+        wait(2)
       end
     end
 
     for _, location in ipairs(secondTable) do
       for _, card in ipairs(location.cardTable) do
         if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated and card.location == location then
-          card.faceUp = true
           card:activateEffect()
         end
         card.faceUp = true
+        wait(2)
       end
     end
 
@@ -107,6 +110,5 @@ function GameManagerClass:endTurn()
 
     opponent:stageCards()
 end
-
 
 

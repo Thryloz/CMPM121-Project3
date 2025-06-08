@@ -48,7 +48,7 @@ function ShowAllCardsButton:new(posX, posY)
     setmetatable(ShowAllCardsButton, {__index = ButtonClass})
     local showAllCards = ButtonClass:new()
     setmetatable(showAllCards, ShowAllCardsButton)
-    
+
     showAllCards.position = Vector(posX, posY)
     showAllCards.text = "Show All Cards"
 

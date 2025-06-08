@@ -301,7 +301,7 @@ function PoseidonCard:new()
             if location ~= lowestCard.location and #location.cardTable ~= 4 then table.insert(locationOptions, location) end
         end
 
-        if #locationOptions == 0 then lowestCard:discardCard() end -- TODO: move to discard
+        if #locationOptions == 0 then lowestCard:discardCard() end
 
         -- move card
         local num = math.random(#locationOptions)

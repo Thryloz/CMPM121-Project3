@@ -64,7 +64,7 @@ function GrabberClass:grab()
   -- check if show all button is clicked
   if self:CheckShowCardsButton() then player.showAllCards = not player.showAllCards return end
   if self:CheckEndTurnButton() then gameManager:endTurn() return end
-  if win and self:CheckRestartButton() then love.load() return end
+  if win and self:CheckRestartButton() then love.event.quit('restart') return end
 
   -- check hand
   for i, card in ipairs(player.hand) do
