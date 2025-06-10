@@ -173,7 +173,7 @@ function GrabberClass:CheckEndTurnButton()
   if self.currentMousePos.x > EndTurnButton.position.x and
   self.currentMousePos.x < EndTurnButton.position.x + EndTurnButton.size.x and
   self.currentMousePos.y > EndTurnButton.position.y and
-  self.currentMousePos.y < EndTurnButton.position.y + EndTurnButton.size.y
+  self.currentMousePos.y < EndTurnButton.position.y + EndTurnButton.size.y and isRevealingCards == false
   then return true end return false
 end
 

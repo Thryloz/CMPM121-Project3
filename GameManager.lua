@@ -1,5 +1,7 @@
 --Jim Lee
 
+isRevealingCards = false
+
 GameManagerClass = {}
 
 function GameManagerClass:new()
@@ -17,9 +19,7 @@ function GameManagerClass:new()
 end
 
 function GameManagerClass:endTurn()
-
-    if isRevealingCard then return end
-
+    isRevealingCards = true
     -- determine whose winning
     if gameManager.turn ~= 1 then
       if self.playerPoints > self.opponentPoints then self.winningPlayer = player
@@ -40,25 +40,24 @@ function GameManagerClass:endTurn()
       secondTable = playerLocationTable
     end
 
-
     -- activate effects
     for _, location in ipairs(firstTable) do
       for _, card in ipairs(location.cardTable) do
         if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated and card.location == location then
-          card:activateEffect()
+        tick.delay(function() card:activateEffect() end, 1)
+          card.faceUp = true
         end
         card.faceUp = true
-        wait(2)
       end
     end
 
     for _, location in ipairs(secondTable) do
       for _, card in ipairs(location.cardTable) do
         if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated and card.location == location then
-          card:activateEffect()
+          tick.delay(function() card:activateEffect() end, 1)
+          card.faceUp = true
         end
         card.faceUp = true
-        wait(2)
       end
     end
 
@@ -108,7 +107,13 @@ function GameManagerClass:endTurn()
       opponent:addCardToHand(drawnCard)
     end
 
+    tick.delay(function() print("opponent is placing cards") end, 5)
     opponent:stageCards()
+    isRevealingCards = false
 end
 
-
+function wait(time)
+  while time > 0 do
+    time = time - coroutine.yield()
+  end
+end

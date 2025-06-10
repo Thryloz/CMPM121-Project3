@@ -174,11 +174,12 @@ function ZeusCard:new()
 
     function ZeusCard:activateEffect()
         local hand = nil
-        if Zeus.player then hand = opponent.hand else hand = player.hand end -- this made me realize lua doesn't really have ternary operators
+        if self.player then hand = opponent.hand else hand = player.hand end -- this made me realize lua doesn't really have ternary operators
         for _, card in ipairs(hand) do
             card.power = card.power - 1
             if card.power < 0 then card.power = 0 end
         end
+        print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -201,6 +202,7 @@ function AresCard:new()
         for _, card in ipairs(self.location.opposingLocation.cardTable) do
             self.power = self.power + 2
         end
+        print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -232,6 +234,7 @@ function MedusaCard:new()
             end
             if card.power < 0 then card.power = 0 end
         end
+        print(self.name ..": ".. self.text)
     end
 
     return Medusa
@@ -260,6 +263,7 @@ function CyclopsCard:new()
                 self.power = self.power + 2
             end
         end
+        print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -308,7 +312,7 @@ function PoseidonCard:new()
         local resultingLocation = locationOptions[num]
         self.location.opposingLocation:removeCard(lowestCard)
         resultingLocation:addCard(lowestCard)
-
+        print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -331,6 +335,7 @@ function ArtemisCard:new()
         if #self.location.opposingLocation.cardTable == 1 then
             self.power = self.power + 5
         end
+        print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -355,6 +360,7 @@ function HeraCard:new()
         for _, card in ipairs(hand) do
             card.power = card.power + 1
         end
+        print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -383,6 +389,7 @@ function DemeterCard:new()
             local drawnCard = table.remove(opponent.deck, 1)
             opponent:addCardToHand(drawnCard)
         end
+        print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -406,7 +413,7 @@ function HadesCard:new()
         if self.isPlayer then discard = player.discard else discard = opponent.discard end
         if #discard == 0 then return end
         self.power = self.power + (#discard * 2)
-        
+        print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -441,6 +448,7 @@ function HerculesCard:new()
             end
         end
         if strongestCard == self then self.power = self.power * 2 end
+        print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -461,6 +469,7 @@ function DionysusCard:new()
 
     function DionysusCard:activateEffect()
         self.power = self.power + ((#self.location.cardTable-1) * 2)
+        print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 

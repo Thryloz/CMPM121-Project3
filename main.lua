@@ -4,6 +4,7 @@
 io.stdout:setvbuf("no")
 
 require "vector"
+tick = require "tick"
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -20,6 +21,8 @@ BUTTON_WIDTH = SCREEN_WIDTH/20
 BUTTON_HEIGHT = SCREEN_HEIGHT/30
 
 WIN_SCORE = 100
+
+
 
 require "location"
 require "card"
@@ -134,6 +137,7 @@ end
 
 
 function love.update(dt)
+    tick.update(dt)
     player:update()
     grabber:update()
 end
@@ -201,11 +205,3 @@ function isLessThanThreeDupes(card)
 
 end
 
-
-function wait( seconds )
-  local dt = 0
-  while dt < seconds do
-    dt = dt + 1
-    coroutine.yield(true)
-  end
-end
