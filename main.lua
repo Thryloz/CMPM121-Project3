@@ -65,6 +65,8 @@ function love.load()
 
     cardFont = love.graphics.newFont(CARD_FONT_SIZE)
     infoFont = love.graphics.newFont(INFO_FONT_SIZE)
+    endFont = love.graphics.newFont(100)
+    resultsFont = love.graphics.newFont(50)
 
     player = PlayerClass:new()
     playerLocationTable = {}
@@ -138,7 +140,6 @@ function love.load()
         opponent:addCardToHand(card)
     end
     opponent:stageCards()
-
 end
 
 
@@ -151,18 +152,31 @@ end
 
 function love.draw()
     if win == true then
-        RestartButton = RestartButton:new(SCREEN_HEIGHT/2 + 150, SCREEN_HEIGHT/2 + 150)
+        RestartButton = RestartButton:new(SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT/2 + (SCREEN_HEIGHT/4) - BUTTON_HEIGHT/2)
         if gameManager.winningPlayer == player then
-            love.graphics.setFont(love.graphics.newFont(100))
-            love.graphics.printf("YOU WIN", 0, SCREEN_HEIGHT/2, SCREEN_WIDTH, "center")
-            RestartButton:draw()
+            love.graphics.setFont(endFont)
+            love.graphics.printf("YOU WIN!", SCREEN_WIDTH/2 - endFont:getWidth("YOU WIN")/2, SCREEN_HEIGHT/6, endFont:getWidth("YOU WIN!"),  "center")
         else
-            love.graphics.setFont(love.graphics.newFont(100))
-            love.graphics.printf("YOU LOSE", 0, SCREEN_HEIGHT/2, SCREEN_WIDTH, "center")
-            RestartButton:draw()
+            love.graphics.setFont(endFont)
+            love.graphics.printf("YOU LOSE!", SCREEN_WIDTH/2 - endFont:getWidth("YOU LOSE!")/2, SCREEN_HEIGHT/6, endFont:getWidth("YOU LOSE!"),  "center")
         end
+        love.graphics.setFont(resultsFont)
+        love.graphics.printf("RESULTS", SCREEN_WIDTH/2 - endFont:getWidth("RESULTS")/2, SCREEN_HEIGHT/3, endFont:getWidth("RESULTS"), "center")
+
+        love.graphics.setColor(0, 0.329, 0, 1)
+        love.graphics.printf("YOUR POINTS", SCREEN_WIDTH/3 - endFont:getWidth("YOUR POINTS")/2, SCREEN_HEIGHT/2.25, endFont:getWidth("YOUR POINTS"), "center")
+        love.graphics.printf(tostring(gameManager.playerPoints), SCREEN_WIDTH/3 - endFont:getWidth(tostring(gameManager.playerPoints))/2, SCREEN_HEIGHT/1.75, endFont:getWidth(tostring(gameManager.playerPoints)), "center")
+
+        love.graphics.setColor(1, 0, 0, 1)
+        love.graphics.printf("OPPONENT POINTS", SCREEN_WIDTH/1.5 - endFont:getWidth("OPPONENT POINTS")/2, SCREEN_HEIGHT/2.25, endFont:getWidth("OPPONENT POINTS"), "center")
+        love.graphics.printf(tostring(gameManager.opponentPoints), SCREEN_WIDTH/1.5 - endFont:getWidth(tostring(gameManager.opponentPoints))/2, SCREEN_HEIGHT/1.75, endFont:getWidth(tostring(gameManager.opponentPoints)), "center")
+
+
+        RestartButton:draw()
+
         return
     end
+
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("fill", 0, SCREEN_HEIGHT/2-1, SCREEN_WIDTH, 2)
 
