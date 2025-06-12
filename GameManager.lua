@@ -116,6 +116,8 @@ function GameManagerClass:update(dt)
       player.mana = gameManager.turn
       opponent.mana = gameManager.turn
 
+      
+      print("Appollo boost is "..tostring(playerApolloManaBoost))
       if playerApolloManaBoost then player.mana = player.mana + 1 end
       if opponentApolloManaBoost then opponent.mana = opponent.mana + 1 end
       playerApolloManaBoost = false

@@ -44,6 +44,11 @@ function CardClass:draw()
         love.graphics.rectangle("line", self.position.x, self.position.y, self.size.x+0.5, self.size.y+0.5, 6, 6)
     end
 
+    if self.isPlayer and self.effectActivated then
+        love.graphics.setColor(1, .843, 0, 1) -- color values [0, 1]
+        love.graphics.rectangle("line", self.position.x, self.position.y, self.size.x+0.5, self.size.y+0.5, 6, 6)
+    end
+
     if self.faceUp then
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.rectangle("fill", self.position.x, self.position.y, self.size.x, self.size.y, 6, 6)
@@ -574,7 +579,7 @@ function AphroditeCard:new()
     Aphrodite.effectType = EFFECT_TYPE.onReveal
 
     function AphroditeCard:activateEffect()
-        for _, card in ipairs(self.location.cardTable) do
+        for _, card in ipairs(self.location.opposingLocation.cardTable) do
             card.power = card.power - 1
         end
         self.effectActivated = true
