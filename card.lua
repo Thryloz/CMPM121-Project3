@@ -39,6 +39,7 @@ function CardClass:new(isPlayer)
 end
 
 function CardClass:draw()
+    love.graphics.setFont(cardFont)
     if self.state ~= CARD_STATE.IDLE then
         love.graphics.setColor(1, 0, 0, 1) -- color values [0, 1]
         love.graphics.rectangle("line", self.position.x, self.position.y, self.size.x+0.5, self.size.y+0.5, 6, 6)

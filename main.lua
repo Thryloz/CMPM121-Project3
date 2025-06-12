@@ -67,6 +67,7 @@ function love.load()
     infoFont = love.graphics.newFont(INFO_FONT_SIZE)
     endFont = love.graphics.newFont(100)
     resultsFont = love.graphics.newFont(50)
+    locationPointsFont = love.graphics.newFont(20)
 
     player = PlayerClass:new()
     playerLocationTable = {}

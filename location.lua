@@ -31,12 +31,25 @@ end
 
 function LocationClass:draw()
     -- draw power
+    love.graphics.setFont(locationPointsFont)
     if self.player then
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.printf(tostring(self.power), self.position.x, self.position.y - 20, self.interactSize.x, "center")
+        if self.power > self.opposingLocation.power then
+            love.graphics.setColor({0.024, 0.251, 0.169, 1})
+        elseif self.power < self.opposingLocation.power then
+            love.graphics.setColor({1, 0 , 0, 1})
+        else
+            love.graphics.setColor(1, 1, 1, 1)
+        end
+        love.graphics.printf(tostring(self.power), self.position.x, self.position.y - 25, self.interactSize.x, "center")
     else
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.printf(tostring(self.power), self.position.x, self.position.y + self.interactSize.y + 10, self.interactSize.x, "center")
+        if self.power > self.opposingLocation.power then
+            love.graphics.setColor({0.024, 0.251, 0.169, 1})
+        elseif self.power < self.opposingLocation.power then
+            love.graphics.setColor({1, 0 , 0, 1})
+        else
+            love.graphics.setColor(1, 1, 1, 1)
+        end
+        love.graphics.printf(tostring(self.power), self.position.x, self.position.y + self.interactSize.y + 5, self.interactSize.x, "center")
     end
 
 

@@ -1,8 +1,25 @@
 # Project3
 CMPM121 Third Project Card Game
 
+<ins>Final Project Update</ins><br/>
+Before I get into new features, please check my grading for the Project 3 Assignment, I got 2 points marked off which I believe should not have.<br/>
+1. Point Calculations seems incorrect.<br/>
+I have double checked this and playtested it with others, there were no point calculation errors. The points represent the total points gained throughout the game, not current amount from the board state. Either the grader misunderstood this or doesn't understand how the point rules from the rubric. The screenshot didn't show any discepencies either. In the final project update, I've made it more clear how the points are calculated with some features I'll mention later, but no changes to the actual point calculation.<br/>
+
+2. Missing people who gave you feedback<br/>
+I thought this requirement was removed, I'm fairly certain the professor mentioned this in class and we were low on time as well.<br/>
+
+Please correct these or at least provide an explanation. I would be fine if I misunderstood the feedback part, but not the points part.
+
+THE UPDATES
+- CARD REVEAL DELAYS. Rather than being instant, there is now a 0.5s delay between cards being revealed.
+- Cards already revealed on the player's side are now marked with a golden outline
+
+
+
 <ins>Patterns Used</ins><br/>
 Inheritance - Cards inherit from a Base Card Class, letting it use methods and access common fields such as position without having to rewrite it.<br/>
+Prototype - Also used  by the cards, all cards are a prototype of the base card.<br/>
 Singleton - GameManager is a singleton. Technically the player and opponent classes are singletons as well.<br/>
 Observer- GameManager also acts as an observer.<br/>
 
@@ -16,3 +33,4 @@ There's some interesting layouts I've seen in other people's projects such as a 
 
 <ins>Assets</ins><br/>
 None yet, everything is default Love2D.
+
