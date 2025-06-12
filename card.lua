@@ -106,7 +106,7 @@ function CardClass:discardCard()
         self:moveCard(SCREEN_WIDTH/16, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2)
         table.insert(opponent.discard, self)
     end
-    
+
 end
 
 
@@ -531,9 +531,16 @@ function ShipOfTheseusCard:new()
     function ShipOfTheseusCard:activateEffect()
         if self.isPlayer then
             local card = ShipOfTheseusCard:new()
-            card.power = card.power + 1
+            card.power = self.power + 1
             card.effectActivated = false
+            card.isPlayer = true
             player:addCardToHand(card)
+        else
+            local card = ShipOfTheseusCard:new()
+            card.power = self.power + 1
+            card.effectActivated = false
+            card.isPlayer = false
+            opponent:addCardToHand(card)
         end
         self.effectActivated = true
     end
@@ -601,9 +608,114 @@ function ApolloCard:new()
     Apollo.effectType = EFFECT_TYPE.onReveal
 
     function ApolloCard:activateEffect()
-        if self.isPlayer then gameManager.playerApolloManaBoost = true else gameManager.opponentApolloManaBoost = true end
+        if self.isPlayer then playerApolloManaBoost = true else opponentApolloManaBoost = true end
         self.effectActivated = true
     end
 
     return Apollo
+end
+
+HephaestusCard = {}
+function HephaestusCard:new()
+    HephaestusCard.__index = HephaestusCard
+    setmetatable(HephaestusCard, {__index = CardClass})
+    local Hephaestus = CardClass:new()
+    setmetatable(Hephaestus, HephaestusCard)
+    Hephaestus.name = "Hephaestus"
+    Hephaestus.cost = 4
+    Hephaestus.power = 3
+    Hephaestus.text = "When Revealed: Lower the cost of 2 cards in your hand by 1."
+    Hephaestus.effectType = EFFECT_TYPE.onReveal
+
+    function HephaestusCard:activateEffect()
+        local hand = nil
+        if self.isPlayer then hand = player.hand else hand = opponent.hand end
+
+        local randomCard1 = hand[math.random(#hand)]
+        randomCard1.cost = randomCard1.cost - 1
+
+        local randomCard2 = hand[math.random(#hand)]
+        randomCard2 = randomCard2.cost -1
+        self.effectActivated = true
+    end
+
+    return Hephaestus
+end
+
+PersephoneCard = {}
+function PersephoneCard:new()
+    PersephoneCard.__index = PersephoneCard
+    setmetatable(PersephoneCard, {__index = CardClass})
+    local Persephone = CardClass:new()
+    setmetatable(Persephone, PersephoneCard)
+    Persephone.name = "Persephone"
+    Persephone.cost = 4
+    Persephone.power = 6
+    Persephone.text = "When Revealed: Discard the lowest power card in your hand."
+    Persephone.effectType = EFFECT_TYPE.onReveal
+
+    function PersephoneCard:activateEffect()
+        local hand = nil
+        if self.isPlayer then hand = player.hand else hand = opponent.hand end
+
+        -- find lowest power card
+        local lowestPower = 100
+        local lowestCard = nil
+        for _, card in ipairs(hand) do
+            if card.power < lowestPower then
+                lowestPower = card.power
+                lowestCard = card
+            end
+        end
+
+        if lowestCard == nil then return end
+        
+        if self.isPlayer then
+            for i, card in ipairs(hand) do
+                if card == lowestCard then
+                    player:removeCardFromHand(i)
+                end
+            end
+            self.location = player.discard
+            self:moveCard(SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2)
+            table.insert(player.discard, self)
+        else
+            for i, card in ipairs(hand) do
+                if card == lowestCard then
+                    player:removeCardFromHand(i)
+                end
+            end
+            self.location = opponent.discard
+            self:moveCard(SCREEN_WIDTH/16, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2)
+            table.insert(opponent.discard, self)
+        end
+        self.effectActivated = true
+    end
+
+    return Persephone
+end
+
+PrometheusCard = {}
+function PrometheusCard:new()
+    PrometheusCard.__index = PrometheusCard
+    setmetatable(PrometheusCard, {__index = CardClass})
+    local Prometheus = CardClass:new()
+    setmetatable(Prometheus, PrometheusCard)
+    Prometheus.name = "Prometheus"
+    Prometheus.cost = 6
+    Prometheus.power = 6
+    Prometheus.text = "When Revealed: Draw a card from your opponent's deck."
+    Prometheus.effectType = EFFECT_TYPE.onReveal
+
+    function PrometheusCard:activateEffect()
+        local deck = nil
+        if self.isPlayer then deck = opponent.deck else deck = player.deck end
+
+        local randomNum = math.random(#deck)
+        stolenCard = table.remove(deck, randomNum)
+        if self.isPlayer then player:addCardToHand(stolenCard) else opponent:addCardToHand(stolenCard) end
+        self.effectActivated = true
+    end
+
+    return Prometheus
 end
