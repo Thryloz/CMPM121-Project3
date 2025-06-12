@@ -1,7 +1,8 @@
 # Project3
 CMPM121 Third Project Card Game
 
-<ins>Final Project Update | 6-12-2025</ins><br/>
+Final Project Update | 6-12-2025 <br/>
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 Before I get into new features, please check my grading for the Project 3 Assignment, I got 2 points marked off which I believe should not have.<br/>
 1. Point Calculations seems incorrect.<br/>
 I have double checked this and playtested it with others, there were no point calculation errors. The points represent the total points gained throughout the game, not current amount from the board state. Either the grader misunderstood this or doesn't understand how the point rules from the rubric. The screenshot didn't show any discepencies either. In the final project update, I've made it more clear how the points are calculated with some features I'll mention later, but no changes to the actual point calculation.<br/>
@@ -12,6 +13,7 @@ I thought this requirement was removed, I'm fairly certain the professor mention
 Please correct these or at least provide an explanation. I would be fine if I misunderstood the feedback part, but not the points part.
  
 <ins>CHANGELOG</ins><br/>
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 - CARD REVEAL DELAYS. Rather than being instant, there is now a 0.5s delay between cards being revealed.
 - Cards already revealed on the player's side are now marked with a golden outline.
 - The Console is now a feature!
@@ -38,10 +40,9 @@ Please correct these or at least provide an explanation. I would be fine if I mi
 - Revamp of the end screen!
     - Now shows how many points both sides have at the end of game.
 
-Known Bugs
-Some things cause crashes, but extremely rarely and difficult to replicate.
-------------------------------------------------------------------------------------------------------------------------------------------------------------
+There are now some crash bugs since I've introduced so many new cards, with the size of the game it's become difficult to test and replicate. They're quite rare so hopefully you won't encounter them, but it's something to I have to keep in mind for future projects. Perhaps a way to develop a testing version.
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 <ins>Patterns Used</ins><br/>
 Inheritance - Cards inherit from a Base Card Class, letting it use methods and access common fields such as position without having to rewrite it.<br/>
 Prototype - Also used  by the cards, all cards are a prototype of the base card.<br/>
