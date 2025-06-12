@@ -195,7 +195,7 @@ function AresCard:new()
     setmetatable(Ares, AresCard)
     Ares.name = "Ares"
     Ares.cost = 4
-    Ares.power = 2
+    Ares.power = 4
     Ares.text = "When Revealed: Gain +2 power for each enemy card here."
     Ares.effectType = EFFECT_TYPE.onReveal
 
@@ -357,7 +357,7 @@ function HeraCard:new()
 
     function HeraCard:activateEffect()
         hand = nil
-        if Hera.isPlayer then hand = player.hand else hand = opponent.hand end
+        if self.isPlayer then hand = player.hand else hand = opponent.hand end
         for _, card in ipairs(hand) do
             card.power = card.power + 1
         end
