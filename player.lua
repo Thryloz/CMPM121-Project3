@@ -100,7 +100,7 @@ function PlayerClass:draw()
 end
 
 function PlayerClass:addCardToHand(card)
-    if card == nil then return end
+    if card == nil or #self.hand == 7 then return end
     table.insert(self.hand, card)
     card.location = self
     card.faceUp = true

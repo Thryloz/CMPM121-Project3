@@ -1,6 +1,8 @@
 --Jim Lee
 
 isRevealingCards = false
+playerApolloManaBoost = false
+opponentApolloManaBoost = false
 local cardsToActivate = {}
 
 GameManagerClass = {}
@@ -113,6 +115,11 @@ function GameManagerClass:update(dt)
       gameManager.turn = gameManager.turn + 1
       player.mana = gameManager.turn
       opponent.mana = gameManager.turn
+
+      if playerApolloManaBoost then player.mana = player.mana + 1 end
+      if opponentApolloManaBoost then opponent.mana = opponent.mana + 1 end
+      playerApolloManaBoost = false
+      opponentApolloManaBoost = false
 
       if #player.hand < 7 and #player.deck >= 1 then 
         local drawnCard = table.remove(player.deck, 1)

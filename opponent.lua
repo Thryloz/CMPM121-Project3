@@ -80,7 +80,7 @@ function OpponentClass:draw()
 end
 
 function OpponentClass:addCardToHand(card)
-    if card == nil then return end
+    if card == nil or #self.hand == 7 then return end
     table.insert(self.hand, card)
     card.location = self
     self:orderCards()

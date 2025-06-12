@@ -28,7 +28,7 @@ function CardClass:new(isPlayer)
     card.effectType = EFFECT_TYPE.none
     card.state = CARD_STATE.IDLE
     card.location = nil
-    card.isPlayer = true
+    card.isPlayer = isPlayer
     card.effectActivated = false
     card.faceUp = false
 
@@ -475,4 +475,130 @@ function DionysusCard:new()
     end
 
     return Dionysus
+end
+
+HermesCard = CardClass:new()
+function HermesCard:new()
+    HermesCard.__index = HermesCard
+    setmetatable(HermesCard, {__index = CardClass})
+    local Hermes = CardClass:new()
+    setmetatable(Hermes, HermesCard)
+    Hermes.name = "Hermes"
+    Hermes.cost = 2
+    Hermes.power = 4
+    Hermes.text = "When Revealed: Moves to another location."
+    Hermes.effectType = EFFECT_TYPE.onReveal
+
+    function HermesCard:activateEffect()
+        -- find locations
+        local locationOptions = {}
+        local locationTable = nil
+        if self.isPlayer then locationTable = playerLocationTable else locationTable = opponentLocationTable end
+        for _, location in ipairs(locationTable) do
+            if location ~= self.location and #location.cardTable ~= 4 then table.insert(locationOptions, location) end
+        end
+
+        if #locationOptions == 0 then self.effectActivated = true return end
+
+        -- move card
+        local num = math.random(#locationOptions)
+        local resultingLocation = locationOptions[num]
+        self.location:removeCard(self)
+        resultingLocation:addCard(self)
+        self.effectActivated = true
+    end
+
+    return Hermes
+end
+
+ShipOfTheseusCard = CardClass:new()
+function ShipOfTheseusCard:new()
+    ShipOfTheseusCard.__index = ShipOfTheseusCard
+    setmetatable(ShipOfTheseusCard, {__index = CardClass})
+    local ShipOfTheseus = CardClass:new()
+    setmetatable(ShipOfTheseus, ShipOfTheseusCard)
+    ShipOfTheseus.name = "ShipOfTheseus"
+    ShipOfTheseus.cost = 2
+    ShipOfTheseus.power = 2
+    ShipOfTheseus.text = "When Revealed: Add a copy with +1 power to your hand."
+    ShipOfTheseus.effectType = EFFECT_TYPE.onReveal
+
+    function ShipOfTheseusCard:activateEffect()
+        if self.isPlayer then
+            local card = ShipOfTheseusCard:new()
+            card.power = card.power + 1
+            card.effectActivated = false
+            player:addCardToHand(card)
+        end
+        self.effectActivated = true
+    end
+
+    return ShipOfTheseus
+end
+
+MidasCard = {}
+function MidasCard:new()
+    MidasCard.__index = MidasCard
+    setmetatable(MidasCard, {__index = CardClass})
+    local Midas = CardClass:new()
+    setmetatable(Midas, MidasCard)
+    Midas.name = "Midas"
+    Midas.cost = 5
+    Midas.power = 3
+    Midas.text = "When Revealed: Set ALL cards here to 3 power."
+    Midas.effectType = EFFECT_TYPE.onReveal
+
+    function MidasCard:activateEffect()
+        for _, card in ipairs(self.location.cardTable) do
+            card.power = 3
+        end
+        for _, card in ipairs(self.location.opposingLocation.cardTable) do
+            card.power = 3
+        end
+        self.effectActivated = true
+    end
+
+    return Midas
+end
+
+AphroditeCard = {}
+function AphroditeCard:new()
+    AphroditeCard.__index = AphroditeCard
+    setmetatable(AphroditeCard, {__index = CardClass})
+    local Aphrodite = CardClass:new()
+    setmetatable(Aphrodite, AphroditeCard)
+    Aphrodite.name = "Aphrodite"
+    Aphrodite.cost = 4
+    Aphrodite.power = 7
+    Aphrodite.text = "When Revealed: Lower the power of each enemy card here by 1."
+    Aphrodite.effectType = EFFECT_TYPE.onReveal
+
+    function AphroditeCard:activateEffect()
+        for _, card in ipairs(self.location.cardTable) do
+            card.power = card.power - 1
+        end
+        self.effectActivated = true
+    end
+
+    return Aphrodite
+end
+
+ApolloCard = {}
+function ApolloCard:new()
+    ApolloCard.__index = ApolloCard
+    setmetatable(ApolloCard, {__index = CardClass})
+    local Apollo = CardClass:new()
+    setmetatable(Apollo, ApolloCard)
+    Apollo.name = "Apollo"
+    Apollo.cost = 5
+    Apollo.power = 6
+    Apollo.text = "When Revealed: Gain +1 mana next turn."
+    Apollo.effectType = EFFECT_TYPE.onReveal
+
+    function ApolloCard:activateEffect()
+        if self.isPlayer then gameManager.playerApolloManaBoost = true else gameManager.opponentApolloManaBoost = true end
+        self.effectActivated = true
+    end
+
+    return Apollo
 end
