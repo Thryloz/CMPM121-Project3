@@ -68,11 +68,10 @@ function GameManagerClass:endTurn()
 
     isRevealingCards = true
 
-    -- isRevealingCards = false
 end
 
 timer = 0
-delay = 1
+delay = 0.5
 
 function GameManagerClass:update(dt)
   if isRevealingCards then

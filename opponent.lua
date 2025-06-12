@@ -54,12 +54,12 @@ function OpponentClass:draw()
     love.graphics.rectangle("fill", self.position.x, self.position.y, self.interactSize.x, self.interactSize.y, 6, 6)
 
     love.graphics.setColor(1, 0, 0, 1)
-    love.graphics.setFont(infoFont)
-    love.graphics.printf("Mana: " ..tostring(self.mana), 7 * SCREEN_WIDTH/8 - 30, SCREEN_HEIGHT/2 - SCREEN_HEIGHT/10, INFO_FONT_SIZE * 5, "center")
+    love.graphics.setFont(infoFont) 
+    love.graphics.printf("Mana: " ..tostring(self.mana), SCREEN_WIDTH/(INFO_FONT_SIZE-10), SCREEN_HEIGHT/2 - SCREEN_HEIGHT/10, INFO_FONT_SIZE * 5, "center")
 
     love.graphics.setColor(1, 0, 0, 1)
     love.graphics.setFont(infoFont)
-    love.graphics.printf("Points: " ..tostring(gameManager.opponentPoints), SCREEN_WIDTH/(INFO_FONT_SIZE-10), SCREEN_HEIGHT/2 - SCREEN_HEIGHT/10, INFO_FONT_SIZE * 5, "center")
+    love.graphics.printf("Points: " ..tostring(gameManager.opponentPoints), 7 * SCREEN_WIDTH/8 - 30, SCREEN_HEIGHT/2 - SCREEN_HEIGHT/10, INFO_FONT_SIZE * 5, "center")
 
     love.graphics.setFont(cardFont)
     for _, card in ipairs(self.hand) do

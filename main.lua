@@ -38,7 +38,6 @@ cardPool = {
     TitanCard,
     ZeusCard,
     AresCard,
-    MedusaCard,
     CyclopsCard,
     PoseidonCard,
     ArtemisCard,
@@ -137,6 +136,7 @@ end
 
 function love.update(dt)
     gameManager:update(dt)
+    if (isRevealingCards) then return end
     player:update()
     grabber:update()
 end

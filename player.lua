@@ -71,12 +71,12 @@ function PlayerClass:draw()
     end
 
     love.graphics.setColor(0, 0, 1, 1)
-    love.graphics.setFont(infoFont)
-    love.graphics.printf("Mana: " ..tostring(self.mana), 7 * SCREEN_WIDTH/8 - 30, SCREEN_HEIGHT/2 + SCREEN_HEIGHT/20, INFO_FONT_SIZE * 5, "center")
+    love.graphics.setFont(infoFont) 
+    love.graphics.printf("Mana: " ..tostring(self.mana), SCREEN_WIDTH/(INFO_FONT_SIZE-10), SCREEN_HEIGHT/2 + SCREEN_HEIGHT/20, INFO_FONT_SIZE * 5, "center")
 
     love.graphics.setColor(0, 0.329, 0, 1)
     love.graphics.setFont(infoFont)
-    love.graphics.printf("Points: " ..tostring(gameManager.playerPoints), SCREEN_WIDTH/(INFO_FONT_SIZE-10), SCREEN_HEIGHT/2 + SCREEN_HEIGHT/20, INFO_FONT_SIZE * 5, "center")
+    love.graphics.printf("Points: " ..tostring(gameManager.playerPoints), 7 * SCREEN_WIDTH/8 - 30, SCREEN_HEIGHT/2 + SCREEN_HEIGHT/20, INFO_FONT_SIZE * 5, "center")
 
     love.graphics.setFont(cardFont)
     -- draw cards in hand
