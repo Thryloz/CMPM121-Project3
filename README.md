@@ -29,11 +29,17 @@ Please correct these or at least provide an explanation. I would be fine if I mi
     - Persephone
     - Prometheus
     - Pandora
+    - Icarus
+    - Iris
     - Nyx
+    - Atlas
+    - Helios
     - Removed Medusa
 - Revamp of the end screen!
     - Now shows how many points both sides have at the end of game.
-    - 
+
+Known Bugs
+Some things cause crashes, but extremely rarely and difficult to replicate.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 <ins>Patterns Used</ins><br/>
