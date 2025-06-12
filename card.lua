@@ -405,7 +405,7 @@ function HadesCard:new()
     setmetatable(Hades, HadesCard)
     Hades.name = "Hades"
     Hades.cost = 4
-    Hades.power = 1
+    Hades.power = 2
     Hades.text = "When Revealed: Gain +2 power for each card in your discard pile."
     Hades.effectType = EFFECT_TYPE.onReveal
 
