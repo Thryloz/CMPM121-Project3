@@ -21,6 +21,9 @@ Please correct these or at least provide an explanation. I would be fine if I mi
 - Swapped points and mana location.
     - After some more playtest, it made more sense to have the mana on the left since it's on the left for the cards as well.
 - Cards can no longer be moved after they are placed.
+- Tie is broken by player winning, game is hard enough as is.
+- Revamp of the end screen!
+    - Now shows how many points both sides have at the end of game.
 - Added the following cards:
     - Hermes
     - Ship Of Theseus
@@ -37,9 +40,7 @@ Please correct these or at least provide an explanation. I would be fine if I mi
     - Atlas
     - Helios
     - Removed Medusa
-- Revamp of the end screen!
-    - Now shows how many points both sides have at the end of game.
-
+ 
 There are now some crash bugs since I've introduced so many new cards, with the size of the game it's become difficult to test and replicate. They're quite rare so hopefully you won't encounter them, but it's something to I have to keep in mind for future projects. Perhaps a way to develop a testing version.
 
 Here is a list of cards added and tested:
