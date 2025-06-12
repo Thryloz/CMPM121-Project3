@@ -42,6 +42,9 @@ Please correct these or at least provide an explanation. I would be fine if I mi
 
 There are now some crash bugs since I've introduced so many new cards, with the size of the game it's become difficult to test and replicate. They're quite rare so hopefully you won't encounter them, but it's something to I have to keep in mind for future projects. Perhaps a way to develop a testing version.
 
+Here is a list of cards added and tested:
+https://docs.google.com/spreadsheets/d/1evXyXlMr6XoIrusqhWE59Ww_oS2-gdeqiCtHRJL9HJE/edit?usp=sharing
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 <ins>Patterns Used</ins><br/>
 Inheritance - Cards inherit from a Base Card Class, letting it use methods and access common fields such as position without having to rewrite it.<br/>
