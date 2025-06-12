@@ -44,11 +44,6 @@ function CardClass:draw()
         love.graphics.rectangle("line", self.position.x, self.position.y, self.size.x+0.5, self.size.y+0.5, 6, 6)
     end
 
-    if self.isPlayer and self.effectActivated then
-        love.graphics.setColor(1, .843, 0, 1) -- color values [0, 1]
-        love.graphics.rectangle("line", self.position.x, self.position.y, self.size.x+0.5, self.size.y+0.5, 6, 6)
-    end
-
     if self.faceUp then
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.rectangle("fill", self.position.x, self.position.y, self.size.x, self.size.y, 6, 6)
@@ -64,6 +59,12 @@ function CardClass:draw()
         love.graphics.setColor(0, 0, 1, 1)
         love.graphics.rectangle("fill", self.position.x, self.position.y, self.size.x, self.size.y, 6, 6)
     end
+
+    if self.isPlayer and self.effectActivated then
+        love.graphics.setColor(1, .843, 0, 1) -- color values [0, 1]
+        love.graphics.rectangle("line", self.position.x, self.position.y, self.size.x+0.5, self.size.y+0.5, 6, 6)
+    end
+    
 end
 
 function CardClass:checkForMouseOver(grabber)
