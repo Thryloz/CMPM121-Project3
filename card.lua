@@ -556,6 +556,8 @@ function SwordOfDamoclesCard:new()
         if self.location.power <= self.location.opposingLocation.power then
             self.power = self.power - 1
         end
+
+        if self.power < 0 then self.power = 0 end
     end
 
     return SwordOfDamocles
