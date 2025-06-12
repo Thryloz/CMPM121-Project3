@@ -25,6 +25,7 @@ end
 
 function GameManagerClass:endTurn()
     cardsToReveal = {}
+    endOfTurnCards = {}
 
     -- determine whose winning
     if gameManager.turn ~= 1 then
