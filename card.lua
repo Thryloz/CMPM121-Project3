@@ -794,8 +794,18 @@ function IrisCard:new()
     Iris.effectType = EFFECT_TYPE.onEndTurn
 
     function IrisCard:activateEffect()
-        for _, card in ipairs(self.location.cardTable) do
-            if card ~= self and card.text ~= "Vanilla" then
+        local locationOptions = {}
+        local locationTable = {}
+
+        if self.isPlayer then locationTable = playerLocationTable else locationTable = opponentLocationTable end
+        for _, location in ipairs(locationTable) do
+            if location ~= self.location then
+                table.insert(locationOptions, location)
+            end
+        end
+        
+        for _, location in ipairs(locationOptions) do
+            for _, card in ipairs(location) do
                 card.power = card.power + 1
             end
         end
