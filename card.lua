@@ -317,6 +317,7 @@ function PoseidonCard:new()
         -- move card
         local num = math.random(#locationOptions)
         local resultingLocation = locationOptions[num]
+        if resultingLocation == nil then self.effectActivated = true return end 
         self.location.opposingLocation:removeCard(lowestCard)
         resultingLocation:addCard(lowestCard)
         -- print(self.name ..": ".. self.text)
@@ -677,18 +678,18 @@ function PersephoneCard:new()
                     player:removeCardFromHand(i)
                 end
             end
-            self.location = player.discard
-            self:moveCard(SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2)
-            table.insert(player.discard, self)
+            lowestCard.location = player.discard
+            lowestCard:moveCard(SCREEN_WIDTH - SCREEN_WIDTH/16 - CARD_SIZE.x, LOCATION_HEIGHT_PLAYER + CARD_SIZE.y/2)
+            table.insert(player.discard, lowestCard)
         else
             for i, card in ipairs(hand) do
                 if card == lowestCard then
-                    player:removeCardFromHand(i)
+                    opponent:removeCardFromHand(i)
                 end
             end
-            self.location = opponent.discard
-            self:moveCard(SCREEN_WIDTH/16, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2)
-            table.insert(opponent.discard, self)
+            lowestCard.location = opponent.discard
+            lowestCard:moveCard(SCREEN_WIDTH/16, LOCATION_HEIGHT_OPPONENT + CARD_SIZE.y/2)
+            table.insert(opponent.discard, lowestCard)
         end
         self.effectActivated = true
     end
