@@ -3,7 +3,8 @@
 isRevealingCards = false
 playerApolloManaBoost = false
 opponentApolloManaBoost = false
-local cardsToActivate = {}
+local cardsToReveal = {}
+local endOfTurnCards = {}
 
 GameManagerClass = {}
 
@@ -23,7 +24,7 @@ function GameManagerClass:new()
 end
 
 function GameManagerClass:endTurn()
-    cardsToActivate = {}
+    cardsToReveal = {}
 
     -- determine whose winning
     if gameManager.turn ~= 1 then
@@ -45,14 +46,17 @@ function GameManagerClass:endTurn()
       secondTable = playerLocationTable
     end
 
-    -- activate effects
+    -- add cards to reveal
     for _, location in ipairs(firstTable) do
       for _, card in ipairs(location.cardTable) do
         if card.effectType == EFFECT_TYPE.none and card.faceUp == false then
-          table.insert(cardsToActivate, card)
+          table.insert(cardsToReveal, card)
         end
         if card.effectType == EFFECT_TYPE.onReveal and card.effectActivated == false then
-          table.insert(cardsToActivate, card)
+          table.insert(cardsToReveal, card)
+        end
+        if card.effectType == EFFECT_TYPE.onEndTurn then
+          table.insert(endOfTurnCards, card)
         end
       end
     end
@@ -60,10 +64,13 @@ function GameManagerClass:endTurn()
     for _, location in ipairs(secondTable) do
       for _, card in ipairs(location.cardTable) do
         if card.effectType == EFFECT_TYPE.none and card.faceUp == false then
-          table.insert(cardsToActivate, card)
+          table.insert(cardsToReveal, card)
         end
         if card.effectType == EFFECT_TYPE.onReveal and card.effectActivated == false then
-          table.insert(cardsToActivate, card)
+          table.insert(cardsToReveal, card)
+        end
+        if card.effectType == EFFECT_TYPE.onEndTurn then
+          table.insert(endOfTurnCards, card)
         end
       end
     end
@@ -77,7 +84,7 @@ delay = 0.5
 
 function GameManagerClass:update(dt)
   if isRevealingCards then
-    if #cardsToActivate == 0 then
+    if #cardsToReveal == 0 then
       isRevealingCards = false
       
       -- calculated power after all effects are done
@@ -120,9 +127,16 @@ function GameManagerClass:update(dt)
       if self.opponentPoints >= WIN_SCORE then
         winningPlayer = opponent
         win = true
+        return
       end
 
       -- end turn
+      for _, card in ipairs(endOfTurnCards) do
+        print(card.name.." is activating its end of turn effect!")
+        card.faceUp = true
+        card:activateEffect()
+      end
+
       gameManager.turn = gameManager.turn + 1
       player.mana = gameManager.turn
       opponent.mana = gameManager.turn
@@ -151,7 +165,7 @@ function GameManagerClass:update(dt)
     if timer < delay then
       timer = timer + dt
     else
-      local card = cardsToActivate[1]
+      local card = cardsToReveal[1]
       if card.effectType == EFFECT_TYPE.onReveal then
         card:activateEffect()
       end
@@ -161,7 +175,7 @@ function GameManagerClass:update(dt)
       else
         print("Opponent reveals " ..card.name..".")
       end
-      table.remove(cardsToActivate, 1)
+      table.remove(cardsToReveal, 1)
       timer = 0
     end
   end

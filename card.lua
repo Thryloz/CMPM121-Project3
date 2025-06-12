@@ -551,6 +551,27 @@ function ShipOfTheseusCard:new()
     return ShipOfTheseus
 end
 
+SwordOfDamoclesCard = CardClass:new()
+function SwordOfDamoclesCard:new()
+    SwordOfDamoclesCard.__index = SwordOfDamoclesCard
+    setmetatable(SwordOfDamoclesCard, {__index = CardClass})
+    local SwordOfDamocles = CardClass:new()
+    setmetatable(SwordOfDamocles, SwordOfDamoclesCard)
+    SwordOfDamocles.name = "DamocleSword"
+    SwordOfDamocles.cost = 3
+    SwordOfDamocles.power = 7
+    SwordOfDamocles.text = "End of Turn: Loses 1 power if not winning this location."
+    SwordOfDamocles.effectType = EFFECT_TYPE.onEndTurn
+
+    function SwordOfDamoclesCard:activateEffect()
+        if self.location.power < self.location.opposingLocation.power then
+            self.power = self.power - 1
+        end
+    end
+
+    return SwordOfDamocles
+end
+
 MidasCard = {}
 function MidasCard:new()
     MidasCard.__index = MidasCard
@@ -721,4 +742,100 @@ function PrometheusCard:new()
     end
 
     return Prometheus
+end
+
+PandoraCard = {}
+function PandoraCard:new()
+    PandoraCard.__index = PandoraCard
+    setmetatable(PandoraCard, {__index = CardClass})
+    local Pandora = CardClass:new()
+    setmetatable(Pandora, PandoraCard)
+    Pandora.name = "Pandora"
+    Pandora.cost = 4
+    Pandora.power = 6
+    Pandora.text = "When Revealed: If no ally cards are here, lower this card's power by 5."
+    Pandora.effectType = EFFECT_TYPE.onReveal
+
+    function PandoraCard:activateEffect()
+        if #self.location.cardTable == 1 then
+            self.power = self.power - 5
+
+            if self.power < 0 then
+                self.power = 0
+            end
+        end
+        self.effectActivated = true
+    end
+
+    return Pandora
+end
+
+IcarusCard = {}
+function IcarusCard:new()
+    IcarusCard.__index = IcarusCard
+    setmetatable(IcarusCard, {__index = CardClass})
+    local Icarus = CardClass:new()
+    setmetatable(Icarus, IcarusCard)
+    Icarus.name = "Icarus"
+    Icarus.cost = 5
+    Icarus.power = 3
+    Icarus.text = "End of Turn: Gains +1 power, but is discarded when its power is greater than 7."
+    Icarus.effectType = EFFECT_TYPE.onEndTurn
+
+    function IcarusCard:activateEffect()
+        self.power = self.power + 1
+        if self.power > 7 then
+            self:discardCard()
+        end
+    end
+
+    return Icarus
+end
+
+IrisCard = {}
+function IrisCard:new()
+    IrisCard.__index = IrisCard
+    setmetatable(IrisCard, {__index = CardClass})
+    local Iris = CardClass:new()
+    setmetatable(Iris, IrisCard)
+    Iris.name = "Iris"
+    Iris.cost = 7
+    Iris.power = 3
+    Iris.text = "End of Turn: Give your cards at each other location +1 power if they have unique powers."
+    Iris.effectType = EFFECT_TYPE.onEndTurn
+
+    function IrisCard:activateEffect()
+        for _, card in ipairs(self.location.cardTable) do
+            if card ~= self and card.text ~= "Vanilla" then
+                card.power = card.power + 1
+            end
+        end
+    end
+
+    return Iris
+end
+
+NyxCard = {}
+function NyxCard:new()
+    NyxCard.__index = NyxCard
+    setmetatable(NyxCard, {__index = CardClass})
+    local Nyx = CardClass:new()
+    setmetatable(Nyx, NyxCard)
+    Nyx.name = "Nyx"
+    Nyx.cost = 6
+    Nyx.power = 2
+    Nyx.text = "When Revealed: Discards your other cards here, add their power to this card."
+    Nyx.effectType = EFFECT_TYPE.onReveal
+
+    function NyxCard:activateEffect()
+        for _, card in ipairs(self.location.cardTable) do
+            if card ~= self then
+                self.power = self.power + card.power
+                card:discardCard()
+            end
+        end
+        self.effectActivated = true
+    end
+
+    return Nyx
 end
