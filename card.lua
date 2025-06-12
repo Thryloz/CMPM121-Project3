@@ -187,7 +187,6 @@ function ZeusCard:new()
             card.power = card.power - 1
             if card.power < 0 then card.power = 0 end
         end
-        -- print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -210,7 +209,6 @@ function AresCard:new()
         for _, card in ipairs(self.location.opposingLocation.cardTable) do
             self.power = self.power + 2
         end
-        -- print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -242,7 +240,6 @@ function MedusaCard:new()
             end
             if card.power < 0 then card.power = 0 end
         end
-        -- print(self.name ..": ".. self.text)
     end
 
     return Medusa
@@ -271,7 +268,6 @@ function CyclopsCard:new()
                 self.power = self.power + 2
             end
         end
-        -- print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -321,7 +317,6 @@ function PoseidonCard:new()
         if resultingLocation == nil then self.effectActivated = true return end 
         self.location.opposingLocation:removeCard(lowestCard)
         resultingLocation:addCard(lowestCard)
-        -- print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -344,7 +339,6 @@ function ArtemisCard:new()
         if #self.location.opposingLocation.cardTable == 1 then
             self.power = self.power + 5
         end
-        -- print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -369,7 +363,6 @@ function HeraCard:new()
         for _, card in ipairs(hand) do
             card.power = card.power + 1
         end
-        -- print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -398,7 +391,6 @@ function DemeterCard:new()
             local drawnCard = table.remove(opponent.deck, 1)
             opponent:addCardToHand(drawnCard)
         end
-        -- print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -422,7 +414,6 @@ function HadesCard:new()
         if self.isPlayer then discard = player.discard else discard = opponent.discard end
         if #discard == 0 then return end
         self.power = self.power + (#discard * 2)
-        -- print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -457,7 +448,6 @@ function HerculesCard:new()
             end
         end
         if strongestCard == self then self.power = self.power * 2 end
-        -- print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -478,7 +468,6 @@ function DionysusCard:new()
 
     function DionysusCard:activateEffect()
         self.power = self.power + ((#self.location.cardTable-1) * 2)
-        -- print(self.name ..": ".. self.text)
         self.effectActivated = true
     end
 
@@ -828,14 +817,58 @@ function NyxCard:new()
     Nyx.effectType = EFFECT_TYPE.onReveal
 
     function NyxCard:activateEffect()
+        local cards = {}
         for _, card in ipairs(self.location.cardTable) do
             if card ~= self then
-                self.power = self.power + card.power
-                card:discardCard()
+                table.insert(cards, card)
             end
+        end
+        for _, card in ipairs(cards) do
+            card:discardCard()
+            self.power = self.power + card.power
         end
         self.effectActivated = true
     end
 
     return Nyx
+end
+
+AtlasCard = {}
+function AtlasCard:new()
+    AtlasCard.__index = AtlasCard
+    setmetatable(AtlasCard, {__index = CardClass})
+    local Atlas = CardClass:new()
+    setmetatable(Atlas, AtlasCard)
+    Atlas.name = "Atlas"
+    Atlas.cost = 8
+    Atlas.power = 16
+    Atlas.text = "End of Turn: Loses 1 power if your side of this location is full."
+    Atlas.effectType = EFFECT_TYPE.onEndTurn
+
+    function AtlasCard:activateEffect()
+        if #self.location.cardTable == 4 then
+            self.power = self.power - 1
+        end
+    end
+
+    return Atlas
+end
+
+HeliosCard = {}
+function HeliosCard:new()
+    HeliosCard.__index = HeliosCard
+    setmetatable(HeliosCard, {__index = CardClass})
+    local Helios = CardClass:new()
+    setmetatable(Helios, HeliosCard)
+    Helios.name = "Helios"
+    Helios.cost = 6
+    Helios.power = 15
+    Helios.text = "End of Turn: Discard this."
+    Helios.effectType = EFFECT_TYPE.onEndTurn
+
+    function HeliosCard:activateEffect()
+        self:discardCard()
+    end
+
+    return Helios
 end

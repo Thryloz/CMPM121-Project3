@@ -56,8 +56,11 @@ cardPool = {
     PersephoneCard,
     PrometheusCard,
     PandoraCard,
-    IcarusCard, 
+    IcarusCard,
+    IrisCard,
     NyxCard,
+    AtlasCard,
+    HeliosCard,
 }
 
 function love.load()
