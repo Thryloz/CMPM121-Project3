@@ -10,8 +10,8 @@ I have double checked this and playtested it with others, there were no point ca
 I thought this requirement was removed, I'm fairly certain the professor mentioned this in class and we were low on time as well.<br/>
 
 Please correct these or at least provide an explanation. I would be fine if I misunderstood the feedback part, but not the points part.
-
-THE UPDATES
+ 
+| <ins>THE UPDATE</ins> |
 - CARD REVEAL DELAYS. Rather than being instant, there is now a 0.5s delay between cards being revealed.
 - Cards already revealed on the player's side are now marked with a golden outline
 
