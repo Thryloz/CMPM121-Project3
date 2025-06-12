@@ -4,7 +4,6 @@
 io.stdout:setvbuf("no")
 
 require "vector"
-tick = require "tick"
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -137,7 +136,7 @@ end
 
 
 function love.update(dt)
-    tick.update(dt)
+    gameManager:update(dt)
     player:update()
     grabber:update()
 end
@@ -175,10 +174,10 @@ function love.draw()
     opponent:draw()
     player:draw()
     grabber:draw()
-    
+
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print("Mouse: "..tostring(love.mouse.getX()) .. ", ".. tostring(love.mouse.getY()))
-    
+
 end
 
 function isLessThanThreeDupes(card)

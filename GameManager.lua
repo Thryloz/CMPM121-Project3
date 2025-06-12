@@ -1,6 +1,7 @@
 --Jim Lee
 
 isRevealingCards = false
+local cardsToActivate = {}
 
 GameManagerClass = {}
 
@@ -15,11 +16,13 @@ function GameManagerClass:new()
     if math.random() > 0.5 then gameManager.winningPlayer = player else gameManager.winningPlayer = opponent end
     player.mana = gameManager.turn
     opponent.mana = gameManager.turn
+    print("---Turn "..gameManager.turn.."---")
     return gameManager
 end
 
 function GameManagerClass:endTurn()
-    isRevealingCards = true
+    cardsToActivate = {}
+
     -- determine whose winning
     if gameManager.turn ~= 1 then
       if self.playerPoints > self.opponentPoints then self.winningPlayer = player
@@ -43,77 +46,106 @@ function GameManagerClass:endTurn()
     -- activate effects
     for _, location in ipairs(firstTable) do
       for _, card in ipairs(location.cardTable) do
-        if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated and card.location == location then
-        tick.delay(function() card:activateEffect() end, 1)
-          card.faceUp = true
+        if card.effectType == EFFECT_TYPE.none and card.faceUp == false then
+          table.insert(cardsToActivate, card)
         end
-        card.faceUp = true
+        if card.effectType == EFFECT_TYPE.onReveal and card.effectActivated == false then
+          table.insert(cardsToActivate, card)
+        end
       end
     end
 
     for _, location in ipairs(secondTable) do
       for _, card in ipairs(location.cardTable) do
-        if card.effectType == EFFECT_TYPE.onReveal and not card.effectActivated and card.location == location then
-          tick.delay(function() card:activateEffect() end, 1)
-          card.faceUp = true
+        if card.effectType == EFFECT_TYPE.none and card.faceUp == false then
+          table.insert(cardsToActivate, card)
         end
-        card.faceUp = true
+        if card.effectType == EFFECT_TYPE.onReveal and card.effectActivated == false then
+          table.insert(cardsToActivate, card)
+        end
       end
     end
 
-    -- calculated power after all effects are done
-    for _, location in ipairs(firstTable) do
-      location:calculatePower()
-    end
+    isRevealingCards = true
 
-    for _, location in ipairs(secondTable) do
-      location:calculatePower()
-    end
+    -- isRevealingCards = false
+end
 
-    -- points 
-    for _, location in ipairs(playerLocationTable) do
-      local diff = location.power - location.opposingLocation.power
-      if diff >= 0 then
-        self.playerPoints = self.playerPoints + diff
-      else
-        self.opponentPoints = self.opponentPoints - diff
+timer = 0
+delay = 1
+
+function GameManagerClass:update(dt)
+  if isRevealingCards then
+    if #cardsToActivate == 0 then
+      isRevealingCards = false
+      
+      -- calculated power after all effects are done
+      for _, location in ipairs(playerLocationTable) do
+        location:calculatePower()
       end
-    end
 
-    -- check win 
-    if self.playerPoints >= WIN_SCORE then
-      winningPlayer = player
-      win = true
+      for _, location in ipairs(opponentLocationTable) do
+        location:calculatePower()
+      end
+
+      -- points 
+      for _, location in ipairs(playerLocationTable) do
+        local diff = location.power - location.opposingLocation.power
+        if diff >= 0 then
+          self.playerPoints = self.playerPoints + diff
+        else
+          self.opponentPoints = self.opponentPoints - diff
+        end
+      end
+
+      -- check win 
+      if self.playerPoints >= WIN_SCORE then
+        winningPlayer = player
+        win = true
+        return
+      end
+
+      if self.opponentPoints >= WIN_SCORE then
+        winningPlayer = opponent
+        win = true
+      end
+
+      -- end turn
+      gameManager.turn = gameManager.turn + 1
+      player.mana = gameManager.turn
+      opponent.mana = gameManager.turn
+
+      if #player.hand < 7 and #player.deck >= 1 then 
+        local drawnCard = table.remove(player.deck, 1)
+        player:addCardToHand(drawnCard)
+      end
+
+      if #opponent.hand < 7 and #opponent.deck >= 1 then 
+        local drawnCard = table.remove(opponent.deck, 1)
+        opponent:addCardToHand(drawnCard)
+      end
+      
+      print("---Turn "..gameManager.turn.."---")
+      opponent:stageCards()
       return
     end
 
-    if self.opponentPoints >= WIN_SCORE then
-      winningPlayer = opponent
-      win = true
+    if timer < delay then
+      timer = timer + dt
+    else
+      local card = cardsToActivate[1]
+      if card.effectType == EFFECT_TYPE.onReveal then
+        card:activateEffect()
+      end
+      card.faceUp = true
+      if card.isPlayer then
+        print("You reveal " ..card.name..".")
+      else
+        print("Opponent reveals " ..card.name..".")
+      end
+      table.remove(cardsToActivate, 1)
+      timer = 0
     end
-
-    -- end turn
-    gameManager.turn = gameManager.turn + 1
-    player.mana = gameManager.turn
-    opponent.mana = gameManager.turn
-
-    if #player.hand < 7 and #player.deck >= 1 then 
-      local drawnCard = table.remove(player.deck, 1)
-      player:addCardToHand(drawnCard)
-    end
-
-    if #opponent.hand < 7 and #opponent.deck >= 1 then 
-      local drawnCard = table.remove(opponent.deck, 1)
-      opponent:addCardToHand(drawnCard)
-    end
-
-    tick.delay(function() print("opponent is placing cards") end, 5)
-    opponent:stageCards()
-    isRevealingCards = false
-end
-
-function wait(time)
-  while time > 0 do
-    time = time - coroutine.yield()
   end
 end
+

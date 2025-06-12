@@ -107,7 +107,7 @@ end
 function OpponentClass:stageCards()
     if #self.hand == 0 then return end
     local numCardsToPlay = math.random(#self.hand)
-
+    local count = 0
     for i = 0, numCardsToPlay, 1 do
         local card = self.hand[math.random(#self.hand)]
         local location = opponentLocationTable[math.random(3)]
@@ -115,7 +115,15 @@ function OpponentClass:stageCards()
             self:removeCardFromHand(card)
             location:addCard(card)
             self.mana = self.mana - card.cost
+            count = count + 1
         end
+    end
+    if count == 0 then
+        print("Opponent did not add any cards to the field!")
+    elseif count == 1 then
+        print("Opponent added 1 card to the field!")
+    else
+        print("Opponent added "..count.." cards to the field!")
     end
 end
 
