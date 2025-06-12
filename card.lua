@@ -564,7 +564,7 @@ function SwordOfDamoclesCard:new()
     SwordOfDamocles.effectType = EFFECT_TYPE.onEndTurn
 
     function SwordOfDamoclesCard:activateEffect()
-        if self.location.power < self.location.opposingLocation.power then
+        if self.location.power <= self.location.opposingLocation.power then
             self.power = self.power - 1
         end
     end
