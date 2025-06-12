@@ -1,7 +1,7 @@
 # Project3
 CMPM121 Third Project Card Game
 
-Final Project Update | 6-12-2025 <br/>
+Final Project Update & Postmortem | 6-12-2025 <br/>
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 Before I get into new features, please check my grading for the Project 3 Assignment, I got 2 points marked off which I believe should not have.<br/>
 1. Point Calculations seems incorrect.<br/>
@@ -12,7 +12,7 @@ I thought this requirement was removed, I'm fairly certain the professor mention
 
 Please correct these or at least provide an explanation. I would be fine if I misunderstood the feedback part, but not the points part.
  
-<ins>CHANGELOG</ins><br/>
+CHANGELOG<br/>
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 - CARD REVEAL DELAYS. Rather than being instant, there is now a 0.5s delay between cards being revealed.
 - Cards already revealed on the player's side are now marked with a golden outline.
@@ -45,6 +45,13 @@ There are now some crash bugs since I've introduced so many new cards, with the 
 
 Here is a list of cards added and tested:
 https://docs.google.com/spreadsheets/d/1evXyXlMr6XoIrusqhWE59Ww_oS2-gdeqiCtHRJL9HJE/edit?usp=sharing
+
+If you want a list of people who gave me feedback, my brother who helped me playtest and told me to switch the mana and points positions.
+
+<ins>Assets</ins><br/>
+Same as before, all default Love2D
+
+Patterns same as the ones listed below.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 <ins>Patterns Used</ins><br/>
