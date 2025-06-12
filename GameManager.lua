@@ -18,7 +18,7 @@ function GameManagerClass:new()
     if math.random() > 0.5 then gameManager.winningPlayer = player else gameManager.winningPlayer = opponent end
     player.mana = gameManager.turn
     opponent.mana = gameManager.turn
-    print("---Turn "..gameManager.turn.."---")
+    print("-----Turn "..gameManager.turn.."-----")
     return gameManager
 end
 
@@ -89,13 +89,24 @@ function GameManagerClass:update(dt)
         location:calculatePower()
       end
 
+      print("---Point Breakdown---")
       -- points 
       for _, location in ipairs(playerLocationTable) do
         local diff = location.power - location.opposingLocation.power
         if diff >= 0 then
           self.playerPoints = self.playerPoints + diff
+          if diff == 0 then
+            print("Tie at " ..(location.name).. ", no points gained!")
+          else
+            print("You are winning at "..(location.name).." gaining "..(diff).." points!")
+          end
         else
           self.opponentPoints = self.opponentPoints - diff
+          if diff == 0 then
+            print("Tie at " ..(location.name).. ", no points gained!")
+          else
+            print("Opponent is winning at "..(location.name).." gaining "..(-diff).." points!")
+          end
         end
       end
 
@@ -132,7 +143,7 @@ function GameManagerClass:update(dt)
         opponent:addCardToHand(drawnCard)
       end
       
-      print("---Turn "..gameManager.turn.."---")
+      print("-----Turn "..gameManager.turn.."-----")
       opponent:stageCards()
       return
     end

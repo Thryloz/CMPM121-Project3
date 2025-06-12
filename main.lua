@@ -70,15 +70,15 @@ function love.load()
 
     player = PlayerClass:new()
     playerLocationTable = {}
-    playerLocationTable[1] = LocationClass:new(LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_PLAYER, "Isle of Delos", true)
+    playerLocationTable[1] = LocationClass:new(LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_PLAYER, "Arcadia", true)
     playerLocationTable[2] = LocationClass:new(LOCATION_WIDTH_CENTER, LOCATION_HEIGHT_PLAYER, "Olympus", true)
-    playerLocationTable[3] = LocationClass:new(LOCATION_WIDTH_CENTER + LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_PLAYER, "Arcadia", true)
+    playerLocationTable[3] = LocationClass:new(LOCATION_WIDTH_CENTER + LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_PLAYER, "Elysium", true)
 
     opponent = OpponentClass:new()
     opponentLocationTable = {}
-    opponentLocationTable[1] = LocationClass:new(LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_OPPONENT, "Isle of Delos", false)
+    opponentLocationTable[1] = LocationClass:new(LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_OPPONENT, "Arcadia", false)
     opponentLocationTable[2] = LocationClass:new(LOCATION_WIDTH_CENTER, LOCATION_HEIGHT_OPPONENT,  "Olympus", false)
-    opponentLocationTable[3] = LocationClass:new(LOCATION_WIDTH_CENTER + LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_OPPONENT, "Arcadia", false)
+    opponentLocationTable[3] = LocationClass:new(LOCATION_WIDTH_CENTER + LOCATION_WIDTH_CENTER/2, LOCATION_HEIGHT_OPPONENT, "Elysium", false)
 
     playerLocationTable[1].opposingLocation = opponentLocationTable[1]
     playerLocationTable[2].opposingLocation = opponentLocationTable[2]
