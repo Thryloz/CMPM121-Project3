@@ -2,15 +2,6 @@
 CMPM121 Third Project Card Game
 
 Final Project Update & Postmortem | 6-12-2025 <br/>
-------------------------------------------------------------------------------------------------------------------------------------------------------------
-Before I get into new features, please check my grading for the Project 3 Assignment, I got 2 points marked off which I believe should not have.<br/>
-1. Point Calculations seems incorrect.<br/>
-I have double checked this and playtested it with others, there were no point calculation errors. The points represent the total points gained throughout the game, not current amount from the board state. Either the grader misunderstood this or doesn't understand how the point rules work from the rubric. The screenshot they sent didn't show any discrepancies either. In the final project update, I've made it more clear how the points are calculated with some features I'll mention later, but no changes to the actual point calculation.<br/>
-
-2. Missing people who gave you feedback<br/>
-I thought this requirement was removed, I'm fairly certain the professor mentioned this in class and we were low on time as well.<br/>
-
-Please correct these or at least provide an explanation. I would be fine if I misunderstood the feedback part, but not the points part.
  
 CHANGELOG<br/>
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
